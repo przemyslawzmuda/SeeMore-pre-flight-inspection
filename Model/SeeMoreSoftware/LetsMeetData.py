@@ -21,3 +21,8 @@ class LetsMeetData:
             else:
                 dataDictionary.update({directoryPath: fileNames})
         return dataDictionary
+
+    @staticmethod
+    def getDirectoriesPathInDataSet(root_path):
+        dataSetDictionary = LetsMeetData.createDictionaryPathsAndFiles(root_path)
+        return dataSetDictionary.keys()
