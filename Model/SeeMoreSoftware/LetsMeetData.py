@@ -1,4 +1,5 @@
 import os
+import random
 
 
 class LetsMeetData:
@@ -40,3 +41,30 @@ class LetsMeetData:
     def getDirectoriesPathInDataSet(root_path):
         dataSetDictionary = LetsMeetData.createDictionaryPathsAndFiles(root_path)
         return dataSetDictionary.keys()
+
+    @staticmethod
+    def returnRandomImageFromDirectory(root_path):
+        '''
+        :param root_path:
+        :return: outrightPathToRandomImage
+        The following function returns a path to the random image from the root_path directory.
+        '''
+        # Get a dictionary {'path': [img1, img2, ..., img_n]}
+        imagesDictionary = LetsMeetData.createDictionaryPathsAndFiles(root_path)
+        # Get items from imagesDictionary as dict_items: dict_items( [ (path1, [images]) ] )
+        imagesDictionaryItems = imagesDictionary.items() # dict_items() object
+        # Convert the following dict_items() object into a List data type: [ (path1, [images1], ... ]
+        imagesDictionaryItemsList = list(imagesDictionaryItems)
+        # Shuffle the following list, it does not return anything, only reorganize the existing list
+        random.shuffle(imagesDictionaryItemsList)
+        # Get a random tuple
+        randomTuple = random.choice(imagesDictionaryItemsList) # List data type: [ (path1, [images1], ... ]
+        # Split the the tuple components into the two variables
+        pathToImages, imagesList = randomTuple
+        # Return randomize the imagesList using random.sample(sequence, k)
+        randomImagesList = random.sample(imagesList, len(imagesList)) # k = len(imagesList)
+        # Choose a random sample (image) from the randomImagesList
+        randomImage = random.choice(randomImagesList)
+        # create a complete path to the image
+        outrightPathToRandomImage = os.path.join(pathToImages, randomImage)
+        return outrightPathToRandomImage
