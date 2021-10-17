@@ -68,3 +68,6 @@ class LetsMeetData:
         # create a complete path to the image
         outrightPathToRandomImage = os.path.join(pathToImages, randomImage)
         return outrightPathToRandomImage
+
+
+    
