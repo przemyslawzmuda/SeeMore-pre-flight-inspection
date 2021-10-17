@@ -1,5 +1,7 @@
 import os
 import random
+import matplotlib.pyplot as mpyplot
+import matplotlib.image as mimage
 
 
 class LetsMeetData:
@@ -69,5 +71,16 @@ class LetsMeetData:
         outrightPathToRandomImage = os.path.join(pathToImages, randomImage)
         return outrightPathToRandomImage
 
+    def displayImage(self, path_to_image):
+        mpyplot.imshow(mimage.imread(path_to_image))  # pass a tensor image in the matrix as an argument
+        mpyplot.title(os.path.basename(path_to_image))
+        mpyplot.axis(False)
 
-    
+    def showRandomImage(self, root_path_to_dataSet):
+        pathToRandomImageFromDataSet = LetsMeetData.returnRandomImageFromDirectory(root_path_to_dataSet)
+
+        # Display the image in the figure
+        mpyplot.figure()
+        mpyplot.subplot()
+        self.displayImage(pathToRandomImageFromDataSet)
+        mpyplot.show()
