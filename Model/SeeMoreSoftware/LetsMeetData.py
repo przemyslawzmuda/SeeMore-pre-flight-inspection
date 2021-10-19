@@ -71,16 +71,24 @@ class LetsMeetData:
         outrightPathToRandomImage = os.path.join(pathToImages, randomImage)
         return outrightPathToRandomImage
 
-    def displayImage(self, path_to_image):
+    @staticmethod
+    def displayImage(path_to_image):
         mpyplot.imshow(mimage.imread(path_to_image))  # pass a tensor image in the matrix as an argument
         mpyplot.title(os.path.basename(path_to_image))
         mpyplot.axis(False)
 
-    def showRandomImage(self, root_path_to_dataSet):
+    @staticmethod
+    def showRandomImage(root_path_to_dataSet):
+        """
+        :param root_path_to_dataSet:
+        :return: Image
+        The following function displays a random Image from DataSet given as a parameter into the function.
+        The random image will be displayed in the figure.
+        """
         pathToRandomImageFromDataSet = LetsMeetData.returnRandomImageFromDirectory(root_path_to_dataSet)
 
         # Display the image in the figure
         mpyplot.figure()
         mpyplot.subplot()
-        self.displayImage(pathToRandomImageFromDataSet)
+        LetsMeetData.displayImage(pathToRandomImageFromDataSet)
         mpyplot.show()
