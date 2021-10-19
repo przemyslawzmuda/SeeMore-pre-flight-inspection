@@ -113,3 +113,8 @@ class LetsMeetData:
         mpyplot.subplot(1, 2, 2)
         LetsMeetData.displayImageWithRgbScaleReference(pathToRandomImageFromDataSet)
         mpyplot.show()
+
+    @staticmethod
+    def printInfoImage(path_to_image):
+        image = mimage.imread(path_to_image)
+        print(f"Size of the image: {image.size}.\nShape of the image: {image.shape}.\nData type: {image.dtype}.\n")
