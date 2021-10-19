@@ -1,5 +1,6 @@
 import os
 import random
+from PIL import Image
 import matplotlib.pyplot as mpyplot
 import matplotlib.image as mimage
 
@@ -118,3 +119,23 @@ class LetsMeetData:
     def printInfoImage(path_to_image):
         image = mimage.imread(path_to_image)
         print(f"Size of the image: {image.size}.\nShape of the image: {image.shape}.\nData type: {image.dtype}.\n")
+
+    @staticmethod
+    def checkPixelsAtCoordinatesImage(path_to_image):
+        image = Image.open(path_to_image)  # PIL.Image object
+        print(f"Information according to the image:\n{image}")
+
+        # check and print pixels value at (0, 0) coordinates
+        rgb_image = image.convert("RGB")  # convert into RGB color space
+        rgbPixelValueZero = rgb_image.getpixel((0, 0))
+        print(f"The pixel values at coordinates (0, 0) are: {rgbPixelValueZero}.\n")
+
+        x = int(input("Enter the position of the pixel on the X axis: "))
+        y = int(input("Enter the position of the pixel on the Y axis: "))
+        print("\n")
+        r, g, b = rgb_image.getpixel((x, y))
+        print(f"RGB values of the pixel at position ({x}, {y}) are: ({r}, {g}, {b}).")
+        print(f"The value of Red color at position ({x}, {y}) is {r} |")
+        print(f"The value of Green color at position ({x}, {y}) is {g} |")
+        print(f"The value of Blue color at position ({x}, {y}) is {b}.")
+        print("\n")
