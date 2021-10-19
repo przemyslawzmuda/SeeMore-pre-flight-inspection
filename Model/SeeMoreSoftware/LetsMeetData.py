@@ -78,6 +78,14 @@ class LetsMeetData:
         mpyplot.axis(False)
 
     @staticmethod
+    def displayImageWithRgbScaleReference(path_to_image):
+        randomImage = mimage.imread(path_to_image)[:, :, 0]
+        mpyplot.imshow(randomImage)
+        mpyplot.title(os.path.basename(path_to_image))
+        mpyplot.axis(False)
+        mpyplot.colorbar()
+
+    @staticmethod
     def showRandomImage(root_path_to_dataSet):
         """
         :param root_path_to_dataSet:
@@ -91,4 +99,17 @@ class LetsMeetData:
         mpyplot.figure()
         mpyplot.subplot()
         LetsMeetData.displayImage(pathToRandomImageFromDataSet)
+        mpyplot.show()
+
+    @staticmethod
+    def showRandomImageWithRgbScaleReference(root_path_to_dataSet):
+        pathToRandomImageFromDataSet = LetsMeetData.returnRandomImageFromDirectory(root_path_to_dataSet)
+
+        mpyplot.figure()
+        # Display the default image in the figure on the left hand side
+        mpyplot.subplot(1, 2, 1)
+        LetsMeetData.displayImage(pathToRandomImageFromDataSet)
+        # Display the default image in the figure with the RGB scale reference on the right hand side
+        mpyplot.subplot(1, 2, 2)
+        LetsMeetData.displayImageWithRgbScaleReference(pathToRandomImageFromDataSet)
         mpyplot.show()
