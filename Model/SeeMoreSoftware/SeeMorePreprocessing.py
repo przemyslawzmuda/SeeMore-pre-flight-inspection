@@ -42,9 +42,18 @@ class SeeMorePreprocessing:
         except FileNotFoundError:
             print("File not exists.")
 
+    def getDirectoryAndFileName(self, directory_to_file: str) -> tuple:
+        """
+        :param directory_to_file:
+        :return: dataTuple
+        """
+        directory_to_folder = os.path.dirname(directory_to_file)  # return the directory name of pathname
+        file_name = os.path.basename(directory_to_file)
+        dataTuple = (directory_to_folder, file_name)
+        return dataTuple
+
     def convertHeifImageToJpeg(self, directory_to_heif_image):
-        directory = os.path.dirname(directory_to_heif_image)  # return the directory name of pathname
-        heif_image_name = os.path.basename(directory_to_heif_image)
+        directory, heif_image_name = self.getDirectoryAndFileName(directory_to_heif_image)
         name, end = heif_image_name.split(".")
         heif_file = pyheif.read(directory_to_heif_image)  # heif_file is a HeifFile object, read an encoded HEIF image
         # convert a HeifFile object to a Pillow Image object
@@ -55,8 +64,7 @@ class SeeMorePreprocessing:
         self.removeFile(directory_to_heif_image)  # remove unnecessary heif image
 
     def convertPngImageToJpeg(self, directory_to_png_image):
-        directory = os.path.dirname(directory_to_png_image)
-        png_image_name = os.path.basename(directory_to_png_image)
+        directory, png_image_name = self.getDirectoryAndFileName(directory_to_png_image)
         (name, end) = os.path.splitext(png_image_name)
         try:
             with Image.open(directory_to_png_image) as image:
