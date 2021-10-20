@@ -36,16 +36,32 @@ class SeeMorePreprocessing:
         except AttributeError as err:
             print("Zip file can not be converted because of:", err)
 
-    @staticmethod
-    def convertHeifImageToJpeg(directory_to_heif_image):
+    def removeFile(self, directory_to_file):
+        try:
+            os.remove(directory_to_file)
+        except FileNotFoundError:
+            print("File not exists.")
+
+    def convertHeifImageToJpeg(self, directory_to_heif_image):
         directory = os.path.dirname(directory_to_heif_image)  # return the directory name of pathname
         heif_image_name = os.path.basename(directory_to_heif_image)
-        (name, end) = heif_image_name.split(".")
+        name, end = heif_image_name.split(".")
         heif_file = pyheif.read(directory_to_heif_image)  # heif_file is a HeifFile object, read an encoded HEIF image
         # convert a HeifFile object to a Pillow Image object
         heif_file_decoded_to_Pillow_image = Image.frombytes(heif_file.mode, heif_file.size, heif_file.data, "raw",
                                                             heif_file.mode, heif_file.stride)
         # convert a Pillow object to a JPEG extension image
         heif_file_decoded_to_Pillow_image.save(os.path.join(directory, (name + ".jpg")), "JPEG")
-        if os.path.exists(directory_to_heif_image):
-            os.remove(directory_to_heif_image)  # remove unnecessary heif image
+        self.removeFile(directory_to_heif_image)  # remove unnecessary heif image
+
+    def convertPngImageToJpeg(self, directory_to_png_image):
+        directory = os.path.dirname(directory_to_png_image)
+        png_image_name = os.path.basename(directory_to_png_image)
+        (name, end) = os.path.splitext(png_image_name)
+        try:
+            with Image.open(directory_to_png_image) as image:
+                rgb_image = image.convert("RGB")
+                rgb_image.save(os.path.join(directory, (name+".jpg")))
+        except (FileNotFoundError, ValueError, OSError) as err:
+            print(f"Unable to convert an image to JPEG extension. - {err}")
+        self.removeFile(directory_to_png_image)
