@@ -130,3 +130,12 @@ class SeeMorePreprocessing:
         for keyPath, valueImagesNamesList in dataSetDictionary.items():
             # items() returns a list containing a tuple for each key-value pair
             self.cleanImagesFolder(keyPath, valueImagesNamesList)
+
+    @staticmethod
+    def createNewFolder(path_to_folder: str):
+        try:
+            os.mkdir(path_to_folder)
+        except FileExistsError:
+            print("The following folder exists.")
+        except FileNotFoundError:
+            print("The following folder or directory has not been found. Unable to create the new folder.")
