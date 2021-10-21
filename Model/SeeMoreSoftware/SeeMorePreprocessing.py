@@ -1,4 +1,5 @@
 import os
+import time
 import pyheif
 import zipfile
 from PIL import Image
@@ -73,3 +74,40 @@ class SeeMorePreprocessing:
         except (FileNotFoundError, ValueError, OSError) as err:
             print(f"Unable to convert an image to JPEG extension. - {err}")
         self.removeFile(directory_to_png_image)
+
+    def cleanImagesFolder(self, directory_to_folder: str):
+        heic_number = 0
+        png_number = 0
+        jpg_number = 0
+        dsFile_number = 0
+        imagesNamesList = os.listdir(directory_to_folder)
+        print(f"Converting images in the {os.path.basename(directory_to_folder)} data set.")
+        start_process = time.time()
+        for image in imagesNamesList:
+            directory_to_file = os.path.join(directory_to_folder, image)
+            if "HEIC" in image or "heic" in image:
+                self.convertHeifImageToJpeg(directory_to_file)
+                heic_number += 1
+            elif image == ".DS_Store":
+                self.removeFile(directory_to_file)
+                dsFile_number += 1
+            else:
+                try:
+                    with Image.open(directory_to_file) as img:
+                        image_format = img.format
+                        if image_format == "PNG":
+                            self.convertPngImageToJpeg(directory_to_file)
+                            png_number += 1
+                        elif image_format == "JPEG":
+                            jpg_number += 1
+                except (FileNotFoundError, ValueError, OSError) as err:
+                    print(f"Unable to convert an image to JPEG extension. - {err}")
+        how_long = time.strftime("%H:%M:%S", time.gmtime(time.time() - start_process))
+        print(f"\nInformation about the {os.path.basename(directory_to_folder)} data set:")
+        print(f"There are {heic_number} HEIC images converted to JPEG extension.")
+        print(f"There are {png_number} PNG images converted to JPEG extension.")
+        print(f"There are {jpg_number} images with JPEG extension.")
+        print(f"There is/are {dsFile_number} .DS_Store file/files which has been deleted online during converting process.")
+        print(f'Number of the images: {len(os.listdir(directory_to_folder))}.')
+        print(f"Time of the image cleaning: {how_long} [HH:MM:SS].")
+        print("----------------------------------------------------------------------------------")
