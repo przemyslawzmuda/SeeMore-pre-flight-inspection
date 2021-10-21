@@ -133,9 +133,28 @@ class SeeMorePreprocessing:
 
     @staticmethod
     def createNewFolder(path_to_folder: str):
+        """
+        The following function creates the new folder in a given path to folder as a parameter.
+        :param path_to_folder: Path into the folder which will be created.
+        """
         try:
             os.mkdir(path_to_folder)
         except FileExistsError:
-            print("The following folder exists.")
+            print(f"The following folder {os.path.basename(path_to_folder)} exists.")
         except FileNotFoundError:
-            print("The following folder or directory has not been found. Unable to create the new folder.")
+            print(f"The following folder or directory has not been found. Unable to create the new folder.")
+
+    @staticmethod
+    def createFoldersForGenerators(path_to_folder: str) -> tuple:
+        """
+        The following function will create the main folder and two sub-folders for training and validation data.
+        The two sub-folders named 'Training' and 'Validation' will be defined in the main folder afterwards.
+        :param path_to_folder: path to the main folder, if the main folder does not exists, it will be created.
+        :return: trainingDirectory, validationDirectory - directories into the training and validation data respectively.
+        :rtype: tuple(str, str)
+        """
+        trainingDirectory = os.path.join(path_to_folder, "Training")
+        validationDirectory = os.path.join(path_to_folder, "Validation")
+        # map(give_me_function, give_me_parameters)
+        any(map(SeeMorePreprocessing.createNewFolder, [path_to_folder, trainingDirectory, validationDirectory]))
+        return trainingDirectory, validationDirectory  # tuple -> ()
