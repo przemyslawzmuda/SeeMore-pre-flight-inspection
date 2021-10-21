@@ -158,3 +158,27 @@ class SeeMorePreprocessing:
         # map(give_me_function, give_me_parameters)
         any(map(SeeMorePreprocessing.createNewFolder, [path_to_folder, trainingDirectory, validationDirectory]))
         return trainingDirectory, validationDirectory  # tuple -> ()
+
+    @staticmethod
+    def createTrainingValidationDataSets(departue_path: str, approach_path: str):
+        while True:
+            try:
+                trainingDataSize = int(input("Enter the size of the training set in [%] as an integer number: "))
+                assert (trainingDataSize in range(1, 100)), "Give the size of a training data set in range from 1% to "\
+                                                            "99%. - A training set shouldn\'t has 100% of the images"
+                break
+            except ValueError:
+                print("The size of the training set should be entered as an integer number.\n")
+            except AssertionError:
+                print(
+                    "Give the size of a training data set in range from 1% to 99%. - A training set shouldn\'t contain "
+                    "100% of the images as well as this, the validation set should contain some images.\n")
+
+        # Express the trainingDataSize as a percentage value
+        trainingDataSize /= 100
+
+        # Create the Training and Validation folders
+        trainingDirectory, validationDirectory = SeeMorePreprocessing.createFoldersForGenerators(approach_path)
+
+        # Get a data dictionary: { 'path1':[images1, ...], 'path2':[images2, ...], ... }
+        dataDictionary = LetsMeetData.createDictionaryPathsAndFiles(departue_path)
