@@ -3,6 +3,7 @@ import time
 import pyheif
 import zipfile
 from PIL import Image
+from LetsMeetData import LetsMeetData
 
 
 class SeeMorePreprocessing:
@@ -75,13 +76,19 @@ class SeeMorePreprocessing:
             print(f"Unable to convert an image to JPEG extension. - {err}")
         self.removeFile(directory_to_png_image)
 
-    def cleanImagesFolder(self, directory_to_folder: str):
+    def cleanImagesFolder(self, directory_to_folder: str, imagesNamesList: list):
+        """
+        If the format of the image is different
+        than JPEG extension, the image is converted to that format. The JPEG extension is recommended for colourful
+        images by the TensorFlow documentation. During the process of cleaning, also the '.DS_Store' file is deleted.
+        :param directory_to_folder: which contains images
+        :param imagesNamesList: list which contains names of the images
+        """
         heic_number = 0
         png_number = 0
         jpg_number = 0
         dsFile_number = 0
-        imagesNamesList = os.listdir(directory_to_folder)
-        print(f"Converting images in the {os.path.basename(directory_to_folder)} data set.")
+        print(f"Converting images in the {os.path.basename(directory_to_folder)} data set...")
         start_process = time.time()
         for image in imagesNamesList:
             directory_to_file = os.path.join(directory_to_folder, image)
@@ -111,3 +118,15 @@ class SeeMorePreprocessing:
         print(f'Number of the images: {len(os.listdir(directory_to_folder))}.')
         print(f"Time of the image cleaning: {how_long} [HH:MM:SS].")
         print("----------------------------------------------------------------------------------")
+
+    def cleanImagesDataSet(self, path_to_data_set: str):
+        """
+        The following function makes a process of cleaning a data set.  It can works with one folder also with
+        the main folder which contains subdirectories.
+        :param path_to_data_set: folder where all images are stored.
+        """
+        # dataSetDictionary = { 'path1':[images1, ...], 'path2':[images2, ...], ... }
+        dataSetDictionary = LetsMeetData.createDictionaryPathsAndFiles(path_to_data_set)
+        for keyPath, valueImagesNamesList in dataSetDictionary.items():
+            # items() returns a list containing a tuple for each key-value pair
+            self.cleanImagesFolder(keyPath, valueImagesNamesList)
