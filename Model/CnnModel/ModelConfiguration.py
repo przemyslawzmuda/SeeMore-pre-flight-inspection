@@ -3,7 +3,8 @@ class ModelConfiguration:
     recognizeWingComponents = True
     recognizeAircraftPoundings = True
 
-    def __init__(self, model, optimizer, lossFunction, historyName, trainingGenerator, epochsNumber, validationGenerator):
+    def __init__(self, model: object, optimizer: object, lossFunction: object, historyName: str,
+                 trainingGenerator: object, epochsNumber: int, validationGenerator: object):
         # use OOP because the code is well organized, repeatable and memory efficient
         # Attributes (dynamic data) - specific to each class object:
         if self.recognizeAircraftPoundings or self.recognizeAircraftPoundings:
@@ -22,7 +23,7 @@ class ModelConfiguration:
             metrics=["accuracy"]
         )
 
-    def createHistoryAndRunModel(self):
+    def createHistoryAndRunModel(self) -> object:
         self.historyName = self.model.fit(
             self.trainingGenerator,
             epochs=self.epochsNumber,

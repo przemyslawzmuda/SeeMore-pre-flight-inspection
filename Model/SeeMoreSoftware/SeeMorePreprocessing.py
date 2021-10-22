@@ -9,6 +9,10 @@ from LetsMeetData import LetsMeetData
 
 
 class SeeMorePreprocessing:
+    """
+    By using encapsulation I have packaged the following functions into a blueprint that I can create multiple objects.
+    """
+
     @staticmethod
     def cleanAndExtractZipData(path_to_file: str, output_path: str):
         """
