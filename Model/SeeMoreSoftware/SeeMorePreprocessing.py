@@ -1,4 +1,5 @@
 import os
+import random
 import time
 import shutil
 import pyheif
@@ -201,4 +202,36 @@ class SeeMorePreprocessing:
         trainingDirectory, validationDirectory = SeeMorePreprocessing.createFoldersForGenerators(approach_path)
 
         # Get a data dictionary: { 'path1':[images1, ...], 'path2':[images2, ...], ... }
-        dataDictionary = LetsMeetData.createDictionaryPathsAndFiles(departue_path)
+        dataImagesDictionary = LetsMeetData.createDictionaryPathsAndFiles(departue_path)
+
+        for keyPath, valueImagesList in dataImagesDictionary.items():
+            sub_folder = os.path.basename(keyPath)
+            sub_folder_path_training = os.path.join(trainingDirectory, sub_folder)
+            sub_folder_path_validation = os.path.join(validationDirectory, sub_folder)
+            SeeMorePreprocessing.createNewFolder(sub_folder_path_training)
+            SeeMorePreprocessing.createNewFolder(sub_folder_path_validation)
+
+            '''
+            Shuffle a valueImagesList, it doesn't return anything, only reorganize an existing list.
+            The shuffle() method takes a sequence, like a list, and reorganize the order of the items.
+            Note: This method changes the original list, it does not return a new list.
+            '''
+            random.shuffle(valueImagesList)
+
+            # Set the size of the training and validation data sets
+            trainingNumberImages = round(len(valueImagesList) * trainingDataSize)  # round float up into int number
+            # validationNumberImages = len(valueImagesList) - trainingNumberImages
+
+            # Create images list for training and validation data sets
+            trainingImagesList = valueImagesList[:trainingNumberImages]  # [:x] - including the x-ith element
+            validationImagesList = valueImagesList[trainingNumberImages:]  # [x:] - not including the x-ith element
+
+            # Copy files (imagesNames) into the training and validation folders
+            for image in trainingImagesList:
+                departue_path_image = os.path.join(keyPath, image)
+                approach_path_image = os.path.join(sub_folder_path_training, image)
+                SeeMorePreprocessing.copyFile(departue_path_image, approach_path_image)
+            for image in validationImagesList:
+                departue_path_image = os.path.join(keyPath, image)
+                approach_path_image = os.path.join(sub_folder_path_validation, image)
+                SeeMorePreprocessing.copyFile(departue_path_image, approach_path_image)
