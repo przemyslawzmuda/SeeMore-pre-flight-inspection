@@ -1,5 +1,6 @@
 import os
 import time
+import shutil
 import pyheif
 import zipfile
 from PIL import Image
@@ -155,9 +156,28 @@ class SeeMorePreprocessing:
         """
         trainingDirectory = os.path.join(path_to_folder, "Training")
         validationDirectory = os.path.join(path_to_folder, "Validation")
-        # map(give_me_function, give_me_parameters)
+        # map(give_me_function - action, give_me_parameters - data), returns a map object
+        # doesn't modify the data parameter - immutable data
         any(map(SeeMorePreprocessing.createNewFolder, [path_to_folder, trainingDirectory, validationDirectory]))
         return trainingDirectory, validationDirectory  # tuple -> ()
+
+    @staticmethod
+    def copyFile(file_source: str, file_destination: str):
+        """
+        The following function copies a file from file_source into the file_destination.
+        :param file_source: entire path to the file
+        :param file_destination: entire path to file
+        """
+        try:
+            assert isinstance(file_source, str), f"The following path: {file_source} should not be a number."
+            assert isinstance(file_destination, str), f"The following path: {file_destination} should not be a number."
+            shutil.copyfile(file_source, file_destination)
+        except shutil.SameFileError:
+            print(f"File source path: {file_source} and a path to place where the file is copied are the same.")
+        except AssertionError as error_message:
+            print(error_message)
+        except IsADirectoryError as err:
+            print("Unable to copy the directory. The parameters should be a full path to image", err)
 
     @staticmethod
     def createTrainingValidationDataSets(departue_path: str, approach_path: str):
