@@ -10,7 +10,9 @@ from LetsMeetData import LetsMeetData
 
 class SeeMorePreprocessing:
     """
-    By using encapsulation I have packaged the following functions into a blueprint that I can create multiple objects.
+    - Pillar of OOP: By using encapsulation I have packaged the following functions into a blueprint
+    that I can create multiple objects.
+    - Pillar of OOP: Abstraction - hide away information and only give access to things that are crucial.
     """
 
     @staticmethod
@@ -83,7 +85,7 @@ class SeeMorePreprocessing:
             print(f"Unable to convert an image to JPEG extension. - {err}")
         self.removeFile(directory_to_png_image)
 
-    def cleanImagesFolder(self, directory_to_folder: str, imagesNamesList: list):
+    def _cleanImagesFolder(self, directory_to_folder: str, imagesNamesList: list):
         """
         If the format of the image is different
         than JPEG extension, the image is converted to that format. The JPEG extension is recommended for colourful
@@ -126,7 +128,7 @@ class SeeMorePreprocessing:
         print(f"Time of the image cleaning: {how_long} [HH:MM:SS].")
         print("----------------------------------------------------------------------------------")
 
-    def cleanImagesDataSet(self, path_to_data_set: str):
+    def _cleanImagesDataSet(self, path_to_data_set: str):
         """
         The following function makes a process of cleaning a data set. It can works with one folder also with
         the main folder which contains subdirectories.
@@ -136,7 +138,7 @@ class SeeMorePreprocessing:
         dataSetDictionary = LetsMeetData.createDictionaryPathsAndFiles(path_to_data_set)
         for keyPath, valueImagesNamesList in dataSetDictionary.items():
             # items() returns a list containing a tuple for each key-value pair
-            self.cleanImagesFolder(keyPath, valueImagesNamesList)
+            self._cleanImagesFolder(keyPath, valueImagesNamesList)
 
     @staticmethod
     def createNewFolder(path_to_folder: str):
@@ -168,7 +170,7 @@ class SeeMorePreprocessing:
         return trainingDirectory, validationDirectory  # tuple -> ()
 
     @staticmethod
-    def copyFile(file_source: str, file_destination: str):
+    def _copyFile(file_source: str, file_destination: str):
         """
         The following function copies a file from file_source into the file_destination.
         :param file_source: entire path to the file
@@ -186,7 +188,7 @@ class SeeMorePreprocessing:
             print("Unable to copy the directory. The parameters should be a full path to image", err)
 
     @staticmethod
-    def createTrainingValidationDataSets(departue_path: str, approach_path: str):
+    def _createTrainingValidationDataSets(departue_path: str, approach_path: str):  # keep that method private
         """
         The following function creates the training and validation data sets. These data sets are essential
         for ImageDataGenerator and for the neural networks.
@@ -241,8 +243,8 @@ class SeeMorePreprocessing:
             for image in trainingImagesList:
                 departue_path_image = os.path.join(keyPath, image)
                 approach_path_image = os.path.join(sub_folder_path_training, image)
-                SeeMorePreprocessing.copyFile(departue_path_image, approach_path_image)
+                SeeMorePreprocessing._copyFile(departue_path_image, approach_path_image)
             for image in validationImagesList:
                 departue_path_image = os.path.join(keyPath, image)
                 approach_path_image = os.path.join(sub_folder_path_validation, image)
-                SeeMorePreprocessing.copyFile(departue_path_image, approach_path_image)
+                SeeMorePreprocessing._copyFile(departue_path_image, approach_path_image)
