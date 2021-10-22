@@ -10,9 +10,9 @@ from LetsMeetData import LetsMeetData
 
 class SeeMorePreprocessing:
     @staticmethod
-    def cleanAndExtractZipData(path_to_file, output_path):
+    def cleanAndExtractZipData(path_to_file: str, output_path: str):
         """
-        The following function makes a copy of a given zip file and returns at output_path a zip file
+        The following function makes a copy of a given zip file and creates at output_path a zip file
         without '__MACOSX' file as well as extract the cleaned zip file at output_path.
         :param path_to_file: Path to the directory which contains data.
         :param output_path: Place where the zip file will be extracted.
@@ -40,7 +40,7 @@ class SeeMorePreprocessing:
         except AttributeError as err:
             print("Zip file can not be converted because of:", err)
 
-    def removeFile(self, directory_to_file):
+    def removeFile(self, directory_to_file: str):
         try:
             os.remove(directory_to_file)
         except FileNotFoundError:
@@ -48,15 +48,16 @@ class SeeMorePreprocessing:
 
     def getDirectoryAndFileName(self, directory_to_file: str) -> tuple:
         """
-        :param directory_to_file:
-        :return: dataTuple
+        An useful function to divide the directory to file into two parts.
+        :param directory_to_file: Path to the data Set.
+        :return: dataTuple: (directory_to_folder, file_name)
         """
         directory_to_folder = os.path.dirname(directory_to_file)  # return the directory name of pathname
         file_name = os.path.basename(directory_to_file)
         dataTuple = (directory_to_folder, file_name)
         return dataTuple
 
-    def convertHeifImageToJpeg(self, directory_to_heif_image):
+    def convertHeifImageToJpeg(self, directory_to_heif_image: str):
         directory, heif_image_name = self.getDirectoryAndFileName(directory_to_heif_image)
         name, end = heif_image_name.split(".")
         heif_file = pyheif.read(directory_to_heif_image)  # heif_file is a HeifFile object, read an encoded HEIF image
@@ -67,7 +68,7 @@ class SeeMorePreprocessing:
         heif_file_decoded_to_Pillow_image.save(os.path.join(directory, (name + ".jpg")), "JPEG")
         self.removeFile(directory_to_heif_image)  # remove unnecessary heif image
 
-    def convertPngImageToJpeg(self, directory_to_png_image):
+    def convertPngImageToJpeg(self, directory_to_png_image: str):
         directory, png_image_name = self.getDirectoryAndFileName(directory_to_png_image)
         (name, end) = os.path.splitext(png_image_name)
         try:
@@ -123,7 +124,7 @@ class SeeMorePreprocessing:
 
     def cleanImagesDataSet(self, path_to_data_set: str):
         """
-        The following function makes a process of cleaning a data set.  It can works with one folder also with
+        The following function makes a process of cleaning a data set. It can works with one folder also with
         the main folder which contains subdirectories.
         :param path_to_data_set: folder where all images are stored.
         """
@@ -182,6 +183,12 @@ class SeeMorePreprocessing:
 
     @staticmethod
     def createTrainingValidationDataSets(departue_path: str, approach_path: str):
+        """
+        The following function creates the training and validation data sets. These data sets are essential
+        for ImageDataGenerator and for the neural networks.
+        :param departue_path: Path where the default items for neural networks are stored.
+        :param approach_path: Path where the Training and Validation data sets will be created.
+        """
         while True:
             try:
                 trainingDataSize = int(input("Enter the size of the training set in [%] as an integer number: "))
