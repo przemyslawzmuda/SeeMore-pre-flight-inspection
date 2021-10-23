@@ -1,32 +1,42 @@
-class ModelConfiguration:
-    # Class Object Attribute - actual attributes on that specific class, use anywhere in that class
-    recognizeWingComponents = True
-    recognizeAircraftPoundings = True
+import PfiBaselineModel
 
-    def __init__(self, model: object, optimizer: object, lossFunction: object, historyName: str,
+
+# Create a child class that inherits from PfiBaselineModel
+class ModelConfiguration(PfiBaselineModel):
+    # Class Object Attribute
+    recognizeWingComponents = True
+    recognizeAircraftPoundings = False
+
+    # Pillar of OOP: INHERITANCE allows new objects to take on the properties of existing objects.
+
+    def __init__(self, hidden_activation_function: object, output_neurons: int, output_activation_function: object,
+                 model: object, optimizer: object, lossFunction: object, historyName: str,
                  trainingGenerator: object, epochsNumber: int, validationGenerator: object):
-        # use OOP because the code is well organized, repeatable and memory efficient
-        # Attributes (dynamic data) - specific to each class object:
+
+        # Attributes (dynamic data):
         if self.recognizeAircraftPoundings or self.recognizeAircraftPoundings:
+            # super() refers to the class above, not necessary to pass the self keyword
+            super().__init__(hidden_activation_function, output_neurons, output_activation_function)
+            
             self._model = model  # this should be a private variable
-            self._optimizer = optimizer  # self refers to the particular object
-            self._lossFunction = lossFunction
-            self._historyName = historyName
-            self._trainingGenerator = trainingGenerator
-            self._epochsNumber = epochsNumber
-            self._validationGenerator = validationGenerator
+            self.optimizer = optimizer  # self refers to the particular object
+            self.lossFunction = lossFunction
+            self.historyName = historyName
+            self.trainingGenerator = trainingGenerator
+            self.epochsNumber = epochsNumber
+            self.validationGenerator = validationGenerator
 
     def compileModel(self):
         self._model.compile(
-            optimizer=self._optimizer,
-            loss=self._lossFunction,
+            optimizer=self.optimizer,
+            loss=self.lossFunction,
             metrics=["accuracy"]
         )
 
     def createHistoryAndRunModel(self) -> object:
-        self._historyName = self._model.fit(
-            self._trainingGenerator,
-            epochs=self._epochsNumber,
-            validation_data=self._validationGenerator
+        self.historyName = self._model.fit(
+            self.trainingGenerator,
+            epochs=self.epochsNumber,
+            validation_data=self.validationGenerator
         )
         return self._historyName
