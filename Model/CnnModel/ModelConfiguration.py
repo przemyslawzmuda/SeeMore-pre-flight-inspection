@@ -5,7 +5,7 @@ class ModelConfiguration:
 
     if recognizeWingComponents:
         def __init__(self, model: object, optimizer: object, lossFunction: object, historyName: str,
-                     trainingGenerator: object, epochsNumber: int, validationGenerator: object, ownCallback: object):
+                     trainingGenerator: object, epochsNumber: int, validationGenerator: object, **kwargs):
             # Attributes (dynamic data):
             if self.recognizeAircraftPoundings or self.recognizeAircraftPoundings:
                 self.optimizer = optimizer  # self refers to the particular object
@@ -14,7 +14,8 @@ class ModelConfiguration:
                 self.trainingGenerator = trainingGenerator
                 self.epochsNumber = epochsNumber
                 self.validationGenerator = validationGenerator
-                self.callback = ownCallback
+                # Use keyword arguments to for the __init__() method to overload a constructor
+                self.callback = kwargs.get('ownCallback')
 
     def compileModel(self, model):
         model.compile(
@@ -24,10 +25,18 @@ class ModelConfiguration:
         )
 
     def createHistoryAndRunModel(self, model) -> object:
-        self.historyName = model.fit(
-            self.trainingGenerator,
-            epochs=self.epochsNumber,
-            validation_data=self.validationGenerator,
-            callbacks=self.callback
-        )
-        return self.historyName
+        if self.callback:
+            self.historyName = model.fit(
+                self.trainingGenerator,
+                epochs=self.epochsNumber,
+                validation_data=self.validationGenerator,
+                callbacks=self.callback
+            )
+            return self.historyName
+        else:
+            self.historyName = model.fit(
+                self.trainingGenerator,
+                epochs=self.epochsNumber,
+                validation_data=self.validationGenerator,
+            )
+            return self.historyName
