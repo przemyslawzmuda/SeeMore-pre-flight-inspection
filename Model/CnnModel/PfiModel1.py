@@ -1,9 +1,10 @@
 from PfiBaselineModel import BaselineModel
+from ModelConfiguration import ModelConfiguration
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPool2D, Flatten, Dense
 
 
-class PfiModel1(BaselineModel):
+class PfiModel1(BaselineModel, ModelConfiguration):
     # Overrides Class Object Attributes
     recognizeWingComponents = True
     recognizeAircraftPoundings = True
