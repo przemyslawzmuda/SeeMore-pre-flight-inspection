@@ -5,7 +5,7 @@ class ModelConfiguration:
 
     if recognizeWingComponents:
         def __init__(self, model: object, optimizer: object, lossFunction: object, historyName: str,
-                     trainingGenerator: object, epochsNumber: int, validationGenerator: object):
+                     trainingGenerator: object, epochsNumber: int, validationGenerator: object, ownCallback: object):
             # Attributes (dynamic data):
             if self.recognizeAircraftPoundings or self.recognizeAircraftPoundings:
                 self.optimizer = optimizer  # self refers to the particular object
@@ -14,6 +14,7 @@ class ModelConfiguration:
                 self.trainingGenerator = trainingGenerator
                 self.epochsNumber = epochsNumber
                 self.validationGenerator = validationGenerator
+                self.callback = ownCallback
 
     def compileModel(self, model):
         model.compile(
@@ -26,6 +27,7 @@ class ModelConfiguration:
         self.historyName = model.fit(
             self.trainingGenerator,
             epochs=self.epochsNumber,
-            validation_data=self.validationGenerator
+            validation_data=self.validationGenerator,
+            callbacks=self.callback
         )
         return self.historyName
