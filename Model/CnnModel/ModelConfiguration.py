@@ -1,30 +1,24 @@
-import PfiBaselineModel
-
-
-# Create a child class that inherits from PfiBaselineModel
-class ModelConfiguration(PfiBaselineModel):
+class ModelConfiguration:
     # Class Object Attribute
     recognizeWingComponents = True
     recognizeAircraftPoundings = False
 
-    # Pillar of OOP: INHERITANCE allows new objects to take on the properties of existing objects.
-
-    def __init__(self, hidden_activation_function: object, output_neurons: int, output_activation_function: object,
-                 model: object, optimizer: object, lossFunction: object, historyName: str,
-                 trainingGenerator: object, epochsNumber: int, validationGenerator: object):
-
-        # Attributes (dynamic data):
-        if self.recognizeAircraftPoundings or self.recognizeAircraftPoundings:
-            # super() refers to the class above, not necessary to pass the self keyword
-            super().__init__(hidden_activation_function, output_neurons, output_activation_function)
-            
-            self._model = model  # this should be a private variable
-            self.optimizer = optimizer  # self refers to the particular object
-            self.lossFunction = lossFunction
-            self.historyName = historyName
-            self.trainingGenerator = trainingGenerator
-            self.epochsNumber = epochsNumber
-            self.validationGenerator = validationGenerator
+    '''
+    Pillar of OOP: INHERITANCE allows new objects to take on the properties of existing objects.
+    Do INTROSPECTION using dir() method on the object.
+    '''
+    if recognizeWingComponents:
+        def __init__(self, model: object, optimizer: object, lossFunction: object, historyName: str,
+                     trainingGenerator: object, epochsNumber: int, validationGenerator: object):
+            # Attributes (dynamic data):
+            if self.recognizeAircraftPoundings or self.recognizeAircraftPoundings:
+                self._model = model  # this should be a private variable
+                self.optimizer = optimizer  # self refers to the particular object
+                self.lossFunction = lossFunction
+                self.historyName = historyName
+                self.trainingGenerator = trainingGenerator
+                self.epochsNumber = epochsNumber
+                self.validationGenerator = validationGenerator
 
     def compileModel(self):
         self._model.compile(
