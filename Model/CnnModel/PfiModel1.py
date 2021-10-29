@@ -8,6 +8,11 @@ class PfiModel1(BaselineModel):
     recognizeWingComponents = True
     recognizeAircraftPoundings = True
 
+    '''
+    Pillar of OOP: INHERITANCE allows new objects to take on the properties of existing objects.
+    Do INTROSPECTION using dir() method on the object.
+    '''
+
     if recognizeWingComponents or recognizeAircraftPoundings:
         def __init__(self, hidden_activation_function: object, output_activation_function: object, output_neurons: int,
                      conv_activation_function: object, number_filters: int, rows: int, columns: int, channels: int, **kwargs):

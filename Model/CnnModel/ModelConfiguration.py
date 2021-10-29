@@ -3,10 +3,6 @@ class ModelConfiguration:
     recognizeWingComponents = True
     recognizeAircraftPoundings = False
 
-    '''
-    Pillar of OOP: INHERITANCE allows new objects to take on the properties of existing objects.
-    Do INTROSPECTION using dir() method on the object.
-    '''
     if recognizeWingComponents:
         def __init__(self, model: object, optimizer: object, lossFunction: object, historyName: str,
                      trainingGenerator: object, epochsNumber: int, validationGenerator: object):
