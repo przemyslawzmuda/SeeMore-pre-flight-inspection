@@ -16,9 +16,18 @@ class PfiModel1(BaselineModel):
     if recognizeWingComponents or recognizeAircraftPoundings:
         def __init__(self, hidden_activation_function: object, output_activation_function: object, output_neurons: int,
                      conv_activation_function: object, number_filters: int, rows: int, columns: int, channels: int, **kwargs):
+            """
+            :param conv_activation_function:
+            :param number_filters:
+            :param rows: number of the rows for the input_shape parameter in the first convolutional layer
+            :param columns: number of the columns for the input_shape parameter in the first convolutional layer
+            :param channels: number of the color channels for the input_shape parameter in the first convolutional layer
+            :param kwargs: define kernel size and pool size; ex.: kernel_size=(2, 2), pool_size=(2, 2)
+            """
 
             # super() refers to the class above, not necessary to pass the self keyword
             super().__init__(hidden_activation_function, output_neurons, output_activation_function)
+
             self.conv_activation_function = conv_activation_function
             self.number_filters = number_filters
             self.rows = rows
