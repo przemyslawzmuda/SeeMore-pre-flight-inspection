@@ -8,7 +8,6 @@ class ModelConfiguration:
                      trainingGenerator: object, epochsNumber: int, validationGenerator: object):
             # Attributes (dynamic data):
             if self.recognizeAircraftPoundings or self.recognizeAircraftPoundings:
-                self._model = model  # this should be a private variable
                 self.optimizer = optimizer  # self refers to the particular object
                 self.lossFunction = lossFunction
                 self.historyName = historyName
@@ -16,17 +15,17 @@ class ModelConfiguration:
                 self.epochsNumber = epochsNumber
                 self.validationGenerator = validationGenerator
 
-    def compileModel(self):
-        self._model.compile(
+    def compileModel(self, model):
+        model.compile(
             optimizer=self.optimizer,
             loss=self.lossFunction,
             metrics=["accuracy"]
         )
 
-    def createHistoryAndRunModel(self) -> object:
-        self.historyName = self._model.fit(
+    def createHistoryAndRunModel(self, model) -> object:
+        self.historyName = model.fit(
             self.trainingGenerator,
             epochs=self.epochsNumber,
             validation_data=self.validationGenerator
         )
-        return self._historyName
+        return self.historyName
