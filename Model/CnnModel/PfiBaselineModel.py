@@ -2,7 +2,7 @@ from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Flatten, Dense
 
 
-class PfiBaselineModel:
+class BaselineModel:
     # Class Object Attributes - actual attributes on that specific class, use anywhere in that class
     recognizeWingComponents = True
     recognizeAircraftPoundings = False
