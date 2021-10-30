@@ -15,8 +15,7 @@ class SeeMorePreprocessing:
     - Pillar of OOP: Abstraction - hide away information and only give access to things that are crucial.
     """
 
-    @staticmethod
-    def cleanAndExtractZipData(path_to_file: str, output_path: str):
+    def cleanAndExtractZipData(self, path_to_file: str, output_path: str):
         """
         The following function makes a copy of a given zip file and creates at output_path a zip file
         without '__MACOSX' file as well as extract the cleaned zip file at output_path.
@@ -140,8 +139,7 @@ class SeeMorePreprocessing:
             # items() returns a list containing a tuple for each key-value pair
             self._cleanImagesFolder(keyPath, valueImagesNamesList)
 
-    @staticmethod
-    def createNewFolder(path_to_folder: str):
+    def createNewFolder(self, path_to_folder: str):
         """
         The following function creates the new folder in a given path to folder as a parameter.
         :param path_to_folder: Path into the folder which will be created.
@@ -153,8 +151,7 @@ class SeeMorePreprocessing:
         except FileNotFoundError:
             print(f"The following folder or directory has not been found. Unable to create the new folder.")
 
-    @staticmethod
-    def createFoldersForGenerators(path_to_folder: str) -> tuple:
+    def createFoldersForGenerators(self, path_to_folder: str) -> tuple:
         """
         The following function will create the main folder and two sub-folders for training and validation data.
         The two sub-folders named 'Training' and 'Validation' will be defined in the main folder afterwards.
@@ -166,11 +163,10 @@ class SeeMorePreprocessing:
         validationDirectory = os.path.join(path_to_folder, "Validation")
         # map(give_me_function - action, give_me_parameters - data), returns a map object
         # doesn't modify the data parameter - immutable data
-        any(map(SeeMorePreprocessing.createNewFolder, [path_to_folder, trainingDirectory, validationDirectory]))
+        any(map(self.createNewFolder, [path_to_folder, trainingDirectory, validationDirectory]))
         return trainingDirectory, validationDirectory  # tuple -> ()
 
-    @staticmethod
-    def _copyFile(file_source: str, file_destination: str):
+    def _copyFile(self, file_source: str, file_destination: str):
         """
         The following function copies a file from file_source into the file_destination.
         :param file_source: entire path to the file
@@ -187,8 +183,7 @@ class SeeMorePreprocessing:
         except IsADirectoryError as err:
             print("Unable to copy the directory. The parameters should be a full path to image", err)
 
-    @staticmethod
-    def _createTrainingValidationDataSets(departue_path: str, approach_path: str):  # keep that method private
+    def _createTrainingValidationDataSets(self, departue_path: str, approach_path: str):  # keep that method private
         """
         The following function creates the training and validation data sets. These data sets are essential
         for ImageDataGenerator and for the neural networks.
@@ -212,7 +207,7 @@ class SeeMorePreprocessing:
         trainingDataSize /= 100
 
         # Create the Training and Validation folders
-        trainingDirectory, validationDirectory = SeeMorePreprocessing.createFoldersForGenerators(approach_path)
+        trainingDirectory, validationDirectory = self.createFoldersForGenerators(approach_path)
 
         # Get a data dictionary: { 'path1':[images1, ...], 'path2':[images2, ...], ... }
         dataImagesDictionary = LetsMeetData.createDictionaryPathsAndFiles(departue_path)
@@ -243,8 +238,8 @@ class SeeMorePreprocessing:
             for image in trainingImagesList:
                 departue_path_image = os.path.join(keyPath, image)
                 approach_path_image = os.path.join(sub_folder_path_training, image)
-                SeeMorePreprocessing._copyFile(departue_path_image, approach_path_image)
+                self._copyFile(departue_path_image, approach_path_image)
             for image in validationImagesList:
                 departue_path_image = os.path.join(keyPath, image)
                 approach_path_image = os.path.join(sub_folder_path_validation, image)
-                SeeMorePreprocessing._copyFile(departue_path_image, approach_path_image)
+                self._copyFile(departue_path_image, approach_path_image)
