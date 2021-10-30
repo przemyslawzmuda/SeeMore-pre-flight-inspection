@@ -2,6 +2,10 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 
 class BasicGenerator:
+    """
+    BasicGenerator is used to generate batches of tensor image WITHOUT real-time data augmentation.
+    """
+
     def __init__(self, rescale: float):
         """
         If the rescaling factor is provided, the data will be multiplied by the provided factor.
