@@ -15,7 +15,8 @@ class SeeMorePreprocessing:
     - Pillar of OOP: Abstraction - hide away information and only give access to things that are crucial.
     """
 
-    def cleanAndExtractZipData(self, path_to_file: str, output_path: str):
+    @staticmethod
+    def cleanAndExtractZipData(path_to_file: str, output_path: str):
         """
         The following function makes a copy of a given zip file and creates at output_path a zip file
         without '__MACOSX' file as well as extract the cleaned zip file at output_path.
@@ -45,13 +46,13 @@ class SeeMorePreprocessing:
         except AttributeError as err:
             print("Zip file can not be converted because of:", err)
 
-    def removeFile(self, directory_to_file: str):
+    def __removeFile(self, directory_to_file: str):
         try:
             os.remove(directory_to_file)
         except FileNotFoundError:
             print("File not exists.")
 
-    def getDirectoryAndFileName(self, directory_to_file: str) -> tuple:
+    def __getDirectoryAndFileName(self, directory_to_file: str) -> tuple:
         """
         An useful function to divide the directory to file into two parts.
         :param directory_to_file: Path to the data Set.
@@ -62,8 +63,8 @@ class SeeMorePreprocessing:
         dataTuple = (directory_to_folder, file_name)
         return dataTuple
 
-    def convertHeifImageToJpeg(self, directory_to_heif_image: str):
-        directory, heif_image_name = self.getDirectoryAndFileName(directory_to_heif_image)
+    def __convertHeifImageToJpeg(self, directory_to_heif_image: str):
+        directory, heif_image_name = self.__getDirectoryAndFileName(directory_to_heif_image)
         name, end = heif_image_name.split(".")
         heif_file = pyheif.read(directory_to_heif_image)  # heif_file is a HeifFile object, read an encoded HEIF image
         # convert a HeifFile object to a Pillow Image object
@@ -73,8 +74,8 @@ class SeeMorePreprocessing:
         heif_file_decoded_to_Pillow_image.save(os.path.join(directory, (name + ".jpg")), "JPEG")
         self.removeFile(directory_to_heif_image)  # remove unnecessary heif image
 
-    def convertPngImageToJpeg(self, directory_to_png_image: str):
-        directory, png_image_name = self.getDirectoryAndFileName(directory_to_png_image)
+    def __convertPngImageToJpeg(self, directory_to_png_image: str):
+        directory, png_image_name = self.__getDirectoryAndFileName(directory_to_png_image)
         (name, end) = os.path.splitext(png_image_name)
         try:
             with Image.open(directory_to_png_image) as image:
@@ -82,9 +83,9 @@ class SeeMorePreprocessing:
                 rgb_image.save(os.path.join(directory, (name+".jpg")))
         except (FileNotFoundError, ValueError, OSError) as err:
             print(f"Unable to convert an image to JPEG extension. - {err}")
-        self.removeFile(directory_to_png_image)
+        self.__removeFile(directory_to_png_image)
 
-    def _cleanImagesFolder(self, directory_to_folder: str, imagesNamesList: list):
+    def __cleanImagesFolder(self, directory_to_folder: str, imagesNamesList: list):
         """
         If the format of the image is different
         than JPEG extension, the image is converted to that format. The JPEG extension is recommended for colourful
@@ -101,17 +102,17 @@ class SeeMorePreprocessing:
         for image in imagesNamesList:
             directory_to_file = os.path.join(directory_to_folder, image)
             if "HEIC" in image or "heic" in image:
-                self.convertHeifImageToJpeg(directory_to_file)
+                self.__convertHeifImageToJpeg(directory_to_file)
                 heic_number += 1
             elif image == ".DS_Store":
-                self.removeFile(directory_to_file)
+                self.__removeFile(directory_to_file)
                 dsFile_number += 1
             else:
                 try:
                     with Image.open(directory_to_file) as img:
                         image_format = img.format
                         if image_format == "PNG":
-                            self.convertPngImageToJpeg(directory_to_file)
+                            self.__convertPngImageToJpeg(directory_to_file)
                             png_number += 1
                         elif image_format == "JPEG":
                             jpg_number += 1
@@ -127,7 +128,7 @@ class SeeMorePreprocessing:
         print(f"Time of the image cleaning: {how_long} [HH:MM:SS].")
         print("----------------------------------------------------------------------------------")
 
-    def _cleanImagesDataSet(self, path_to_data_set: str):
+    def cleanImagesDataSet(self, path_to_data_set: str):
         """
         The following function makes a process of cleaning a data set. It can works with one folder also with
         the main folder which contains subdirectories.
@@ -137,9 +138,9 @@ class SeeMorePreprocessing:
         dataSetDictionary = LetsMeetData.createDictionaryPathsAndFiles(path_to_data_set)
         for keyPath, valueImagesNamesList in dataSetDictionary.items():
             # items() returns a list containing a tuple for each key-value pair
-            self._cleanImagesFolder(keyPath, valueImagesNamesList)
+            self.__cleanImagesFolder(keyPath, valueImagesNamesList)
 
-    def createNewFolder(self, path_to_folder: str):
+    def __createNewFolder(self, path_to_folder: str):
         """
         The following function creates the new folder in a given path to folder as a parameter.
         :param path_to_folder: Path into the folder which will be created.
@@ -151,7 +152,7 @@ class SeeMorePreprocessing:
         except FileNotFoundError:
             print(f"The following folder or directory has not been found. Unable to create the new folder.")
 
-    def createFoldersForGenerators(self, path_to_folder: str) -> tuple:
+    def __createFoldersForGenerators(self, path_to_folder: str) -> tuple:
         """
         The following function will create the main folder and two sub-folders for training and validation data.
         The two sub-folders named 'Training' and 'Validation' will be defined in the main folder afterwards.
@@ -166,7 +167,7 @@ class SeeMorePreprocessing:
         any(map(self.createNewFolder, [path_to_folder, trainingDirectory, validationDirectory]))
         return trainingDirectory, validationDirectory  # tuple -> ()
 
-    def _copyFile(self, file_source: str, file_destination: str):
+    def __copyFile(self, file_source: str, file_destination: str):
         """
         The following function copies a file from file_source into the file_destination.
         :param file_source: entire path to the file
@@ -183,7 +184,7 @@ class SeeMorePreprocessing:
         except IsADirectoryError as err:
             print("Unable to copy the directory. The parameters should be a full path to image", err)
 
-    def _createTrainingValidationDataSets(self, departue_path: str, approach_path: str):  # keep that method private
+    def createTrainingValidationDataSets(self, departue_path: str, approach_path: str):  # keep that method private
         """
         The following function creates the training and validation data sets. These data sets are essential
         for ImageDataGenerator and for the neural networks.
@@ -207,7 +208,7 @@ class SeeMorePreprocessing:
         trainingDataSize /= 100
 
         # Create the Training and Validation folders
-        trainingDirectory, validationDirectory = self.createFoldersForGenerators(approach_path)
+        trainingDirectory, validationDirectory = self.__createFoldersForGenerators(approach_path)
 
         # Get a data dictionary: { 'path1':[images1, ...], 'path2':[images2, ...], ... }
         dataImagesDictionary = LetsMeetData.createDictionaryPathsAndFiles(departue_path)
@@ -216,8 +217,8 @@ class SeeMorePreprocessing:
             sub_folder = os.path.basename(keyPath)
             sub_folder_path_training = os.path.join(trainingDirectory, sub_folder)
             sub_folder_path_validation = os.path.join(validationDirectory, sub_folder)
-            SeeMorePreprocessing.createNewFolder(sub_folder_path_training)
-            SeeMorePreprocessing.createNewFolder(sub_folder_path_validation)
+            self.__createNewFolder(sub_folder_path_training)
+            self.__createNewFolder(sub_folder_path_validation)
 
             '''
             Shuffle a valueImagesList, it doesn't return anything, only reorganize an existing list.
@@ -238,8 +239,8 @@ class SeeMorePreprocessing:
             for image in trainingImagesList:
                 departue_path_image = os.path.join(keyPath, image)
                 approach_path_image = os.path.join(sub_folder_path_training, image)
-                self._copyFile(departue_path_image, approach_path_image)
+                self.__copyFile(departue_path_image, approach_path_image)
             for image in validationImagesList:
                 departue_path_image = os.path.join(keyPath, image)
                 approach_path_image = os.path.join(sub_folder_path_validation, image)
-                self._copyFile(departue_path_image, approach_path_image)
+                self.__copyFile(departue_path_image, approach_path_image)
