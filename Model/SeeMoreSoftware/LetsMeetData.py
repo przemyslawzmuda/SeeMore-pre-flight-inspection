@@ -1,5 +1,6 @@
 import os
 import random
+import numpy
 from PIL import Image
 import matplotlib.pyplot as mpyplot
 import matplotlib.image as mimage
@@ -71,6 +72,16 @@ class LetsMeetData:
         # create a complete path to the image
         outrightPathToRandomImage = os.path.join(pathToImages, randomImage)
         return outrightPathToRandomImage
+
+    @staticmethod
+    def returnArrayImage(path_to_jpeg_image: str) -> object:
+        """
+        The following function returns an image as an uint8 data type.
+        :param path_to_jpeg_image: absolute path onto the image
+        :rtype: <class 'numpy.ndarray'>
+        """
+        array_image = mimage.imread(path_to_jpeg_image)
+        return array_image
 
     @staticmethod
     def displayImage(path_to_image):
