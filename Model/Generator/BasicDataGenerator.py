@@ -33,7 +33,7 @@ class BasicZoomGenerator(BasicGenerator):
         :param rescale: rescaling factor, defaults to None.
         :param zoom_range: Float or list [lower, upper]. Range for random zoom.
         """
-        super(BasicGenerator, self).__init__(rescale)
+        super().__init__(rescale)
         self.zoom_range = zoom_range
 
     def create_zoom_generator(self) -> object:
