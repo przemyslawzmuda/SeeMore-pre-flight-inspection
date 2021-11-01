@@ -1,11 +1,16 @@
 from Exception.InputIntMismatchException import InputIntMismatchException
 
 
-class DataInput:
+class InputInt:
+    def __init__(self, message: str):
+        """
+        :param message: Insert a message to inform the user what kind of integer value is needed.
+        """
+        self.message = message
 
-    @staticmethod
-    def input_int(number: int):
+    def return_input_int(self) -> int:
         try:
-            return int(number)
+            value = input(self.message)
+            return int(value)
         except ValueError:
-            raise InputIntMismatchException(number) from None
+            raise InputIntMismatchException(value) from None
