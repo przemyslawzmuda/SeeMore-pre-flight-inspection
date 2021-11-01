@@ -6,6 +6,8 @@ import pyheif
 import zipfile
 from PIL import Image
 from LetsMeetData import LetsMeetData
+from IO.DataInput import InputInt
+from Exception.InputIntMismatchException import InputIntMismatchException
 
 
 class SeeMorePreprocessing:
@@ -193,16 +195,14 @@ class SeeMorePreprocessing:
         """
         while True:
             try:
-                trainingDataSize = int(input("Enter the size of the training set in [%] as an integer number: "))
+                trainingDataSize = InputInt("Enter the size of the training set in [%] as an integer number: ").return_input_int()
                 assert (trainingDataSize in range(1, 100)), "Give the size of a training data set in range from 1% to "\
                                                             "99%. - A training set shouldn\'t has 100% of the images"
                 break
-            except ValueError:
-                print("The size of the training set should be entered as an integer number.\n")
-            except AssertionError:
-                print(
-                    "Give the size of a training data set in range from 1% to 99%. - A training set shouldn\'t contain "
-                    "100% of the images as well as this, the validation set should contain some images.\n")
+            except AssertionError as err_message:
+                print(err_message)
+            except InputIntMismatchException as err_message:
+                print(err_message)
 
         # Express the trainingDataSize as a percentage value
         trainingDataSize /= 100
