@@ -23,8 +23,7 @@ class UserChoiceOptions(Enum):
     CLEAN_DATA_SETS = (2, "Start cleaning process of the data images.")
     CREATE_DATA_SETS_FOR_NEURAL_NETWORK = (3, "Create subdirectories for training and validation data sets.")
 
-
-'''
-@unique decorator searches an enumeration's __members__ gathering any aliases it finds. If any are found
-ValueError is raised with details. I no @unique, the will not be any information about duplications.
-'''
+    '''
+    @unique decorator searches an enumeration's __members__ gathering any aliases it finds. If any are found
+    ValueError is raised with details. I no @unique, the will not be any information about duplications.
+    '''
