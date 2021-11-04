@@ -13,4 +13,5 @@ class InputInt:
             value = input(self.message)
             return int(value)
         except ValueError:
-            raise InputIntMismatchException(value) from None
+            # Raised when the input value is not instance of int.
+            raise InputIntMismatchException("The given parameter is not an integer number.", value) from None
