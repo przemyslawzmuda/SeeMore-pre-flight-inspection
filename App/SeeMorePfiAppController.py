@@ -12,6 +12,7 @@ class AppController:
             self.displayOptionsToUser()
             userChoice = self.getUserOption()
             print(userChoice)
+            self.switchOptionsDictionary(userChoice)
 
     def displayOptionsToUser(self):
         for option in UserChoiceOptions:
@@ -28,5 +29,29 @@ class AppController:
             except NoSuchOptionException as error_message:
                 print(error_message)
 
+    def switchOptionsDictionary(self, option):
+        dictionaryOptions = {
+            0: self.closeApp,
+            1: self.unzipFile,
+            2: self.startCleaning,
+            3: self.createDataSetsForNeuralNetwork
+        }
+        dictionaryOptions[option]()
+
+    def closeApp(self):
+        print("Thank You for working with us.\nClosing app...")
+
+    def unzipFile(self):
+        print("Unziping the following file.")
+
+    def startCleaning(self):
+        print("Starting process to clean images data set.")
+
+    def createDataSetsForNeuralNetwork(self):
+        print("Creating data sets for training and validation.")
+
 c = AppController()
 c.mainAppController()
+
+
+
