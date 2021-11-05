@@ -30,7 +30,7 @@ class UserChoiceOptions(Enum):
     '''
 
     @staticmethod
-    def createListChoiceOptions(optionChoice):
+    def returnChoiceOptionFromValuesList(optionChoice):
         try:
             choiceOptionsNumber = [option.value for option in UserChoiceOptions]
             return choiceOptionsNumber[optionChoice]
@@ -38,5 +38,3 @@ class UserChoiceOptions(Enum):
             raise NoSuchOptionException(optionChoice, "No available option:")
         except TypeError as error_message:
             print(error_message)
-
-print(UserChoiceOptions.createListChoiceOptions("1111"))
