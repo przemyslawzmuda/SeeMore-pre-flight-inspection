@@ -1,4 +1,5 @@
 from enum import Enum, unique
+from Exception.OptionException import NoSuchOptionException
 
 
 @unique
@@ -27,3 +28,15 @@ class UserChoiceOptions(Enum):
     @unique decorator searches an enumeration's __members__ gathering any aliases it finds. If any are found
     ValueError is raised with details. I no @unique, the will not be any information about duplications.
     '''
+
+    @staticmethod
+    def createListChoiceOptions(optionChoice):
+        try:
+            choiceOptionsNumber = [option.value for option in UserChoiceOptions]
+            return choiceOptionsNumber[optionChoice]
+        except IndexError:
+            raise NoSuchOptionException(optionChoice, "No available option:")
+        except TypeError as error_message:
+            print(error_message)
+
+print(UserChoiceOptions.createListChoiceOptions("1111"))
