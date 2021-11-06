@@ -14,7 +14,7 @@ class InputIntMismatchException(Exception):
         '''
 
     def __str__(self):  # __str__ called when an instance is printed
-        return f"{self.input_parameter} -> {self.message_error}"
+        return f"{self.input_parameter} ---> {self.message_error}"
         '''
         The following inherited __str__ method of the Exception class is used to display the message when
         the exception is raised. I can customize the __str__ by overriding that.

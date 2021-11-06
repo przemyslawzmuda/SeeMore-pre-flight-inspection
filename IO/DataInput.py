@@ -14,4 +14,4 @@ class InputInt:
             return int(value)  # can be ValueError: invalid literal for int() with base 10: '4.5'
         except ValueError:
             # Raised when the input value is not instance of int.
-            raise InputIntMismatchException("The given parameter is not an integer number.", value) from None
+            raise InputIntMismatchException(value, "The given parameter is not an integer number.") from None
