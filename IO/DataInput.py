@@ -15,3 +15,15 @@ class InputInt:
         except ValueError:
             # Raised when the input value is not instance of int.
             raise InputIntMismatchException(value, "The given parameter is not an integer number.") from None
+
+
+class InputString:
+    def __init__(self, message: str):
+        """
+        :param message: Pass the message to the User to inform what kind of String is needed.
+        """
+        self.message = message
+
+    def return_input_string(self):
+        text = input(self.message)
+        return text
