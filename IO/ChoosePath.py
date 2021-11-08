@@ -21,6 +21,7 @@ class InputPathWithTkinter:
         root = tk.Tk()
         root.withdraw()
         self.show_info_message()
+        root.update()
 
 
 class InputFilePathWithTkinter(InputPathWithTkinter):

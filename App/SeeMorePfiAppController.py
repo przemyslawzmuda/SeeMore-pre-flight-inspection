@@ -36,7 +36,7 @@ class AppController:
         dictionaryOptions = {
             0: self.closeApp,
             1: self.preprocessData.cleanAndExtractZipData,
-            2: self.startCleaning,
+            2: self.preprocessData.cleanImagesDataSet,
             3: self.preprocessData.createTrainingValidationDataSets
         }
         dictionaryOptions[option]()
@@ -49,14 +49,6 @@ class AppController:
             time.sleep(1.5)
             print(".", end="")
 
-    def unzipFile(self):
-        print("Unziping the following file.")
-
-    def startCleaning(self):
-        print("Starting process to clean images data set.")
-
-    def createDataSetsForNeuralNetwork(self):
-        print("Creating data sets for training and validation.")
 
 c = AppController()
 c.mainAppController()

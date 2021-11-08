@@ -136,12 +136,13 @@ class SeeMorePreprocessing:
         print(f"Time of the image cleaning: {how_long} [HH:MM:SS].")
         print("----------------------------------------------------------------------------------")
 
-    def __cleanImagesDataSet(self, path_to_data_set: str):
+    def cleanImagesDataSet(self):
         """
         The following function makes a process of cleaning a data set. It can works with one folder also with
         the main folder which contains subdirectories.
         :param path_to_data_set: folder where all images are stored.
         """
+        path_to_data_set = InputDirectoryPathWithTkinter("Choose a file with data sets.").return_directory_path()
         # dataSetDictionary = { 'path1':[images1, ...], 'path2':[images2, ...], ... }
         dataSetDictionary = LetsMeetData.createDictionaryPathsAndFiles(path_to_data_set)
         for keyPath, valueImagesNamesList in dataSetDictionary.items():
@@ -192,7 +193,7 @@ class SeeMorePreprocessing:
         except IsADirectoryError as err:
             print("Unable to copy the directory. The parameters should be a full path to image", err)
 
-    def createTrainingValidationDataSets(self, departue_path: str, approach_path: str):  # keep that method private
+    def createTrainingValidationDataSets(self):
         """
         The following function creates the training and validation data sets. These data sets are essential
         for ImageDataGenerator and for the neural networks.
@@ -203,12 +204,15 @@ class SeeMorePreprocessing:
             try:
                 trainingDataSize = InputInt("Enter the size of the training set in [%] as an integer number: ").return_input_int()
                 assert (trainingDataSize in range(1, 100)), "Give the size of a training data set in range from 1% to "\
-                                                            "99%. - A training set shouldn\'t has 100% of the images"
+                                                            "99%. - A training set shouldn\'t has 100% of the images\n"
                 break
             except AssertionError as err_message:
                 print(err_message)
             except InputIntMismatchException as err_message:
                 print(err_message)
+
+        departue_path = InputDirectoryPathWithTkinter("Choose a directory where the default items for neural network are stored.").return_directory_path()
+        approach_path = InputDirectoryPathWithTkinter("Choose a directory where the Training and Validation data sets will be created.").return_directory_path()
 
         # Express the trainingDataSize as a percentage value
         trainingDataSize /= 100
@@ -250,3 +254,12 @@ class SeeMorePreprocessing:
                 departue_path_image = os.path.join(keyPath, image)
                 approach_path_image = os.path.join(sub_folder_path_validation, image)
                 self.copyFile(departue_path_image, approach_path_image)
+        time.sleep(2)
+        ShowInformationToUser(
+            "The process of creating Training and Validation data sets has been completed successfully.").display_notification()
+        time.sleep(1)
+        ShowInformationToUser(
+            f"There are {len(trainingImagesList)} images in the Training data set.").display_notification()
+        time.sleep(1)
+        ShowInformationToUser(
+            f"There are {len(validationImagesList)} images in the Validation data set.").display_notification()
