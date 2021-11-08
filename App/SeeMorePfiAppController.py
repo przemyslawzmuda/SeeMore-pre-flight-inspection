@@ -1,10 +1,13 @@
+import time
 from IO.DataInput import InputInt
 from EnumUserOptions import UserChoiceOptions
-from Exception.InputIntMismatchException import InputIntMismatchException
 from Exception.OptionException import NoSuchOptionException
+from Exception.InputIntMismatchException import InputIntMismatchException
+from Model.SeeMoreSoftware.SeeMorePreprocessing import SeeMorePreprocessing
 
 
 class AppController:
+    preprocessData = SeeMorePreprocessing()
 
     def mainAppController(self):
         userChoice = None
@@ -12,7 +15,7 @@ class AppController:
             self.displayOptionsToUser()
             userChoice = self.getUserOption()
             print(userChoice)
-            self.switchOptionsDictionary(userChoice)
+            self.switchOptionInDictionaryPossibilities(userChoice)
 
     def displayOptionsToUser(self):
         for option in UserChoiceOptions:
@@ -29,17 +32,22 @@ class AppController:
             except NoSuchOptionException as error_message:
                 print(error_message)
 
-    def switchOptionsDictionary(self, option):
+    def switchOptionInDictionaryPossibilities(self, option):
         dictionaryOptions = {
             0: self.closeApp,
-            1: self.unzipFile,
+            1: self.preprocessData.cleanAndExtractZipData,
             2: self.startCleaning,
-            3: self.createDataSetsForNeuralNetwork
+            3: self.preprocessData.createTrainingValidationDataSets
         }
         dictionaryOptions[option]()
 
     def closeApp(self):
-        print("Thank You for working with us.\nClosing app...")
+        print("Thank You for working with us.")
+        time.sleep(2)
+        print(f"Closing app", end="")
+        for x in range(3):
+            time.sleep(1.5)
+            print(".", end="")
 
     def unzipFile(self):
         print("Unziping the following file.")

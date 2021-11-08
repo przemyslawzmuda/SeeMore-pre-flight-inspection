@@ -5,8 +5,9 @@ import shutil
 import pyheif
 import zipfile
 from PIL import Image
-from LetsMeetData import LetsMeetData
-from IO.DataInput import InputInt
+from IO.ChoosePath import InputFilePathWithTkinter, InputDirectoryPathWithTkinter
+from IO.DataInput import InputInt, InputString
+from Model.SeeMoreSoftware.LetsMeetData import LetsMeetData
 from Exception.InputIntMismatchException import InputIntMismatchException
 
 
@@ -18,13 +19,15 @@ class SeeMorePreprocessing:
     """
 
     @staticmethod
-    def cleanAndExtractZipData(path_to_file: str, output_path: str):
+    def cleanAndExtractZipData():
         """
         The following function makes a copy of a given zip file and creates at output_path a zip file
         without '__MACOSX' file as well as extract the cleaned zip file at output_path.
         :param path_to_file: Path to the directory which contains data.
         :param output_path: Place where the zip file will be extracted.
         """
+        path_to_file = InputFilePathWithTkinter("Choose the file to unzip.").return_file_path()
+        output_path = InputDirectoryPathWithTkinter("Choose path to extract the zip file.").return_directory_path()
         try:
             default_zip_file = zipfile.ZipFile(path_to_file, mode='r')
             without_rubbish_zip_file = zipfile.ZipFile(
@@ -47,6 +50,8 @@ class SeeMorePreprocessing:
             print("Zip file can not be converted because of:", err)
         except AttributeError as err:
             print("Zip file can not be converted because of:", err)
+        print(f"The unzipping of the {os.path.basename(path_to_file)} has been done correctly.\n")
+        time.sleep(2)
 
     def __removeFile(self, directory_to_file: str):
         try:
