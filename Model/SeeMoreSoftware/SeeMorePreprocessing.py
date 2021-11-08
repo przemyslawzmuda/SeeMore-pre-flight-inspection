@@ -5,8 +5,9 @@ import shutil
 import pyheif
 import zipfile
 from PIL import Image
+from IO.DisplayNotifications import ShowInformationToUser
 from IO.ChoosePath import InputFilePathWithTkinter, InputDirectoryPathWithTkinter
-from IO.DataInput import InputInt, InputString
+from IO.DataInput import InputInt
 from Model.SeeMoreSoftware.LetsMeetData import LetsMeetData
 from Exception.InputIntMismatchException import InputIntMismatchException
 
@@ -27,7 +28,7 @@ class SeeMorePreprocessing:
         :param output_path: Place where the zip file will be extracted.
         """
         path_to_file = InputFilePathWithTkinter("Choose the file to unzip.").return_file_path()
-        output_path = InputDirectoryPathWithTkinter("Choose path to extract the zip file.").return_directory_path()
+        output_path = InputDirectoryPathWithTkinter("Choose a direcotry to extract the zip file.").return_directory_path()
         try:
             default_zip_file = zipfile.ZipFile(path_to_file, mode='r')
             without_rubbish_zip_file = zipfile.ZipFile(
@@ -50,8 +51,8 @@ class SeeMorePreprocessing:
             print("Zip file can not be converted because of:", err)
         except AttributeError as err:
             print("Zip file can not be converted because of:", err)
-        print(f"The unzipping of the {os.path.basename(path_to_file)} has been done correctly.\n")
         time.sleep(2)
+        ShowInformationToUser(f"The process of unzipping of the {os.path.basename(path_to_file)} file has been completed successfully.").display_notification()
 
     def __removeFile(self, directory_to_file: str):
         try:

@@ -13,3 +13,4 @@ class ShowInformationToUser:
         root = tk.Tk()
         root.withdraw()
         self.show_message()
+        root.update()
