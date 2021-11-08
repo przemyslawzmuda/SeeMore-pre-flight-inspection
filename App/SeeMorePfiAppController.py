@@ -1,3 +1,4 @@
+import sys
 import time
 from IO.DataInput import InputInt
 from EnumUserOptions import UserChoiceOptions
@@ -48,6 +49,7 @@ class AppController:
         for x in range(3):
             time.sleep(1.5)
             print(".", end="")
+        sys.exit()
 
 
 c = AppController()
