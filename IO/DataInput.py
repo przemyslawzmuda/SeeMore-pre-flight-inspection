@@ -1,3 +1,5 @@
+import os
+from Exception.PathException import NoSuchDirectoryException
 from Exception.InputIntMismatchException import InputIntMismatchException
 
 
@@ -24,6 +26,14 @@ class InputString:
         """
         self.message = message
 
-    def return_input_string(self):
-        text = input(self.message)
-        return text
+    def return_input_directory(self):
+        while True:
+            try:
+                text = input(self.message)
+                if os.path.exists(text):
+                    return text
+                else:
+                    raise NoSuchDirectoryException(text)
+            except NoSuchDirectoryException as error_message:
+                print(error_message, "\n")
+
