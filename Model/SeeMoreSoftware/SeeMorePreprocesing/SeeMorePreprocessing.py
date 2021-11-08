@@ -1,5 +1,4 @@
 import os
-import random
 import time
 import shutil
 import pyheif
@@ -7,12 +6,9 @@ import zipfile
 from PIL import Image
 from IO.DisplayNotifications import ShowInformationToUser
 from IO.ChoosePath import InputFilePathWithTkinter, InputDirectoryPathWithTkinter
-from IO.DataInput import InputInt
-from Model.SeeMoreSoftware.LetsMeetData import LetsMeetData
-from Exception.InputIntMismatchException import InputIntMismatchException
 
 
-class SeeMorePreprocessing:
+class SeeMorePreprocessingSoftware:
     """
     - Pillar of OOP: By using encapsulation I have packaged the following functions into a blueprint
     that I can create multiple objects.
@@ -24,8 +20,8 @@ class SeeMorePreprocessing:
         """
         The following function makes a copy of a given zip file and creates at output_path a zip file
         without '__MACOSX' file as well as extract the cleaned zip file at output_path.
-        :param path_to_file: Path to the directory which contains data.
-        :param output_path: Place where the zip file will be extracted.
+        path_to_file: Path to the directory which contains data.
+        output_path: Place where the zip file will be extracted.
         """
         path_to_file = InputFilePathWithTkinter("Choose the file to unzip.").return_file_path()
         output_path = InputDirectoryPathWithTkinter("Choose a direcotry to extract the zip file.").return_directory_path()
@@ -54,7 +50,7 @@ class SeeMorePreprocessing:
         time.sleep(2)
         ShowInformationToUser(f"The process of unzipping of the {os.path.basename(path_to_file)} file has been completed successfully.").display_notification()
 
-    def __removeFile(self, directory_to_file: str):
+    def removeFile(self, directory_to_file: str):
         try:
             os.remove(directory_to_file)
         except FileNotFoundError:
@@ -80,7 +76,7 @@ class SeeMorePreprocessing:
                                                             heif_file.mode, heif_file.stride)
         # convert a Pillow object to a JPEG extension image
         heif_file_decoded_to_Pillow_image.save(os.path.join(directory, (name + ".jpg")), "JPEG")
-        self.__removeFile(directory_to_heif_image)  # remove unnecessary heif image
+        self.removeFile(directory_to_heif_image)  # remove unnecessary heif image
 
     def convertPngImageToJpeg(self, directory_to_png_image: str):
         directory, png_image_name = self.getDirectoryAndFileName(directory_to_png_image)
@@ -91,7 +87,7 @@ class SeeMorePreprocessing:
                 rgb_image.save(os.path.join(directory, (name+".jpg")))
         except (FileNotFoundError, ValueError, OSError) as err:
             print(f"Unable to convert an image to JPEG extension. - {err}")
-        self.__removeFile(directory_to_png_image)
+        self.removeFile(directory_to_png_image)
 
     def cleanImagesFolder(self, directory_to_folder: str, imagesNamesList: list):
         """
@@ -110,17 +106,17 @@ class SeeMorePreprocessing:
         for image in imagesNamesList:
             directory_to_file = os.path.join(directory_to_folder, image)
             if "HEIC" in image or "heic" in image:
-                self.__convertHeifImageToJpeg(directory_to_file)
+                self.convertHeifImageToJpeg(directory_to_file)
                 heic_number += 1
             elif image == ".DS_Store":
-                self.__removeFile(directory_to_file)
+                self.removeFile(directory_to_file)
                 dsFile_number += 1
             else:
                 try:
                     with Image.open(directory_to_file) as img:
                         image_format = img.format
                         if image_format == "PNG":
-                            self.__convertPngImageToJpeg(directory_to_file)
+                            self.convertPngImageToJpeg(directory_to_file)
                             png_number += 1
                         elif image_format == "JPEG":
                             jpg_number += 1
@@ -136,19 +132,6 @@ class SeeMorePreprocessing:
         print(f"Time of the image cleaning: {how_long} [HH:MM:SS].")
         print("----------------------------------------------------------------------------------")
 
-    def cleanImagesDataSet(self):
-        """
-        The following function makes a process of cleaning a data set. It can works with one folder also with
-        the main folder which contains subdirectories.
-        :param path_to_data_set: folder where all images are stored.
-        """
-        path_to_data_set = InputDirectoryPathWithTkinter("Choose a file with data sets.").return_directory_path()
-        # dataSetDictionary = { 'path1':[images1, ...], 'path2':[images2, ...], ... }
-        dataSetDictionary = LetsMeetData.createDictionaryPathsAndFiles(path_to_data_set)
-        for keyPath, valueImagesNamesList in dataSetDictionary.items():
-            # items() returns a list containing a tuple for each key-value pair
-            self.cleanImagesFolder(keyPath, valueImagesNamesList)
-
     def createNewFolder(self, path_to_folder: str):
         """
         The following function creates the new folder in a given path to folder as a parameter.
@@ -161,7 +144,7 @@ class SeeMorePreprocessing:
         except FileNotFoundError:
             print(f"The following folder or directory has not been found. Unable to create the new folder.")
 
-    def __createFoldersForGenerators(self, path_to_folder: str) -> tuple:
+    def createFoldersForGenerators(self, path_to_folder: str) -> tuple:
         """
         The following function will create the main folder and two sub-folders for training and validation data.
         The two sub-folders named 'Training' and 'Validation' will be defined in the main folder afterwards.
@@ -192,74 +175,3 @@ class SeeMorePreprocessing:
             print(error_message)
         except IsADirectoryError as err:
             print("Unable to copy the directory. The parameters should be a full path to image", err)
-
-    def createTrainingValidationDataSets(self):
-        """
-        The following function creates the training and validation data sets. These data sets are essential
-        for ImageDataGenerator and for the neural networks.
-        :param departue_path: Path where the default items for neural networks are stored.
-        :param approach_path: Path where the Training and Validation data sets will be created.
-        """
-        while True:
-            try:
-                trainingDataSize = InputInt("Enter the size of the training set in [%] as an integer number: ").return_input_int()
-                assert (trainingDataSize in range(1, 100)), "Give the size of a training data set in range from 1% to "\
-                                                            "99%. - A training set shouldn\'t has 100% of the images\n"
-                break
-            except AssertionError as err_message:
-                print(err_message)
-            except InputIntMismatchException as err_message:
-                print(err_message)
-
-        departue_path = InputDirectoryPathWithTkinter("Choose a directory where the default items for neural network are stored.").return_directory_path()
-        approach_path = InputDirectoryPathWithTkinter("Choose a directory where the Training and Validation data sets will be created.").return_directory_path()
-
-        # Express the trainingDataSize as a percentage value
-        trainingDataSize /= 100
-
-        # Create the Training and Validation folders
-        trainingDirectory, validationDirectory = self.__createFoldersForGenerators(approach_path)
-
-        # Get a data dictionary: { 'path1':[images1, ...], 'path2':[images2, ...], ... }
-        dataImagesDictionary = LetsMeetData.createDictionaryPathsAndFiles(departue_path)
-
-        for keyPath, valueImagesList in dataImagesDictionary.items():
-            sub_folder = os.path.basename(keyPath)
-            sub_folder_path_training = os.path.join(trainingDirectory, sub_folder)
-            sub_folder_path_validation = os.path.join(validationDirectory, sub_folder)
-            self.createNewFolder(sub_folder_path_training)
-            self.createNewFolder(sub_folder_path_validation)
-
-            '''
-            Shuffle a valueImagesList, it doesn't return anything, only reorganize an existing list.
-            The shuffle() method takes a sequence, like a list, and reorganize the order of the items.
-            Note: This method changes the original list, it does not return a new list.
-            '''
-            random.shuffle(valueImagesList)
-
-            # Set the size of the training and validation data sets
-            trainingNumberImages = round(len(valueImagesList) * trainingDataSize)  # round float up into int number
-            # validationNumberImages = len(valueImagesList) - trainingNumberImages
-
-            # Create images list for training and validation data sets
-            trainingImagesList = valueImagesList[:trainingNumberImages]  # [:x] - including the x-ith element
-            validationImagesList = valueImagesList[trainingNumberImages:]  # [x:] - not including the x-ith element
-
-            # Copy files (imagesNames) into the training and validation folders
-            for image in trainingImagesList:
-                departue_path_image = os.path.join(keyPath, image)
-                approach_path_image = os.path.join(sub_folder_path_training, image)
-                self.copyFile(departue_path_image, approach_path_image)
-            for image in validationImagesList:
-                departue_path_image = os.path.join(keyPath, image)
-                approach_path_image = os.path.join(sub_folder_path_validation, image)
-                self.copyFile(departue_path_image, approach_path_image)
-        time.sleep(2)
-        ShowInformationToUser(
-            "The process of creating Training and Validation data sets has been completed successfully.").display_notification()
-        time.sleep(1)
-        ShowInformationToUser(
-            f"There are {len(trainingImagesList)} images in the Training data set.").display_notification()
-        time.sleep(1)
-        ShowInformationToUser(
-            f"There are {len(validationImagesList)} images in the Validation data set.").display_notification()

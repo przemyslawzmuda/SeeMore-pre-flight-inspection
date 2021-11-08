@@ -4,19 +4,21 @@ from IO.DataInput import InputInt
 from EnumUserOptions import UserChoiceOptions
 from Exception.OptionException import NoSuchOptionException
 from Exception.InputIntMismatchException import InputIntMismatchException
-from Model.SeeMoreSoftware.SeeMorePreprocessing import SeeMorePreprocessing
+from Model.SeeMoreSoftware.SeeMorePreprocesing.SeeMorePreprocessing import SeeMorePreprocessingSoftware
+from Model.SeeMoreSoftware.SeeMorePreprocesing import SeeMorePreprocessingController
 
 
 class AppController:
-    preprocessData = SeeMorePreprocessing()
+    def __init__(self):
+        self.preprocessData = SeeMorePreprocessingController.PreprocessingController()
 
     def mainAppController(self):
         userChoice = None
         while userChoice != UserChoiceOptions.EXIT.value:
             self.displayOptionsToUser()
             userChoice = self.getUserOption()
-            print(userChoice)
             self.switchOptionInDictionaryPossibilities(userChoice)
+            print("\n")
 
     def displayOptionsToUser(self):
         for option in UserChoiceOptions:
@@ -36,7 +38,7 @@ class AppController:
     def switchOptionInDictionaryPossibilities(self, option):
         dictionaryOptions = {
             0: self.closeApp,
-            1: self.preprocessData.cleanAndExtractZipData,
+            1: SeeMorePreprocessingSoftware.cleanAndExtractZipData,
             2: self.preprocessData.cleanImagesDataSet,
             3: self.preprocessData.createTrainingValidationDataSets
         }
@@ -50,10 +52,3 @@ class AppController:
             time.sleep(1.5)
             print(".", end="")
         sys.exit()
-
-
-c = AppController()
-c.mainAppController()
-
-
-
