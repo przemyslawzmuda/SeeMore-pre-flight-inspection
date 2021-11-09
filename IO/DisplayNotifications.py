@@ -14,3 +14,12 @@ class ShowInformationToUser:
         root.withdraw()
         self.show_message()
         root.update()
+
+
+class DisplayErrorNotification(ShowInformationToUser):
+
+    def __init__(self, error_message):
+        super().__init__(error_message)
+
+    def show_message(self):
+        messagebox.showwarning("Error information", self.message_info)
