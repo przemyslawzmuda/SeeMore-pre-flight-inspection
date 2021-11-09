@@ -3,9 +3,10 @@ import time
 from IO.DataInput import InputInt
 from EnumUserOptions import UserChoiceOptions
 from Exception.OptionException import NoSuchOptionException
+from IO.DisplayNotifications import DisplayErrorNotification
 from Exception.InputIntMismatchException import InputIntMismatchException
-from Model.SeeMoreSoftware.SeeMorePreprocesing.SeeMorePreprocessing import SeeMorePreprocessingSoftware
 from Model.SeeMoreSoftware.SeeMorePreprocesing import SeeMorePreprocessingController
+from Model.SeeMoreSoftware.SeeMorePreprocesing.SeeMorePreprocessing import SeeMorePreprocessingSoftware
 
 
 class AppController:
@@ -31,9 +32,9 @@ class AppController:
                 choiceEnumOption = UserChoiceOptions.returnChoiceOptionFromValuesList(choiceNumber)
                 return choiceEnumOption
             except InputIntMismatchException as error_message:
-                print(error_message)
+                DisplayErrorNotification(error_message).display_notification()
             except NoSuchOptionException as error_message:
-                print(error_message)
+                DisplayErrorNotification(error_message).display_notification()
 
     def switchOptionInDictionaryPossibilities(self, option):
         dictionaryOptions = {

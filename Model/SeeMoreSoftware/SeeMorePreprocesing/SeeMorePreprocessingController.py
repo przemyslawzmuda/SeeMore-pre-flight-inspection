@@ -3,9 +3,9 @@ import time
 import random
 from IO.DataInput import InputInt
 from IO.ChoosePath import InputDirectoryPathWithTkinter
-from IO.DisplayNotifications import ShowInformationToUser
 from Model.SeeMoreSoftware.LetsMeetData import LetsMeetData
 from Exception.InputIntMismatchException import InputIntMismatchException
+from IO.DisplayNotifications import ShowInformationToUser, DisplayErrorNotification
 from Model.SeeMoreSoftware.SeeMorePreprocesing.SeeMorePreprocessing import SeeMorePreprocessingSoftware
 
 
@@ -43,9 +43,11 @@ class PreprocessingController:
                                                             "99%. - A training set shouldn\'t has 100% of the images\n"
                 break
             except AssertionError as err_message:
-                print(err_message)
+                DisplayErrorNotification(err_message).display_notification()
+                #print(err_message)
             except InputIntMismatchException as err_message:
-                print(err_message)
+                DisplayErrorNotification(err_message).display_notification()
+                #print(err_message)
 
         departue_path = InputDirectoryPathWithTkinter("Choose a directory where the default items for neural network are stored.").return_directory_path()
         approach_path = InputDirectoryPathWithTkinter("Choose a directory where the Training and Validation data sets will be created.").return_directory_path()

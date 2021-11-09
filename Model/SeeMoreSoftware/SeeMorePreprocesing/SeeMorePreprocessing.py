@@ -4,8 +4,8 @@ import shutil
 import pyheif
 import zipfile
 from PIL import Image
-from IO.DisplayNotifications import ShowInformationToUser
 from IO.ChoosePath import InputFilePathWithTkinter, InputDirectoryPathWithTkinter
+from IO.DisplayNotifications import ShowInformationToUser, DisplayErrorNotification
 
 
 class SeeMorePreprocessingSoftware:
@@ -44,9 +44,11 @@ class SeeMorePreprocessingSoftware:
             with zipfile.ZipFile(without_rubbish_zip_file.filename, mode='r') as zipDataSet:
                 zipDataSet.extractall(output_path)
         except IsADirectoryError as err:
-            print("Zip file can not be converted because of:", err)
+            DisplayErrorNotification(err).display_notification()
+            #print("Zip file can not be converted because of:", err)
         except AttributeError as err:
-            print("Zip file can not be converted because of:", err)
+            DisplayErrorNotification(err).display_notification()
+            #print("Zip file can not be converted because of:", err)
         time.sleep(2)
         ShowInformationToUser(f"The process of unzipping of the {os.path.basename(path_to_file)} file has been completed successfully.").display_notification()
 
@@ -54,7 +56,8 @@ class SeeMorePreprocessingSoftware:
         try:
             os.remove(directory_to_file)
         except FileNotFoundError:
-            print("File not exists.")
+            DisplayErrorNotification("File not exists.").display_notification()
+            #print("File not exists.")
 
     def getDirectoryAndFileName(self, directory_to_file: str) -> tuple:
         """
@@ -86,7 +89,8 @@ class SeeMorePreprocessingSoftware:
                 rgb_image = image.convert("RGB")
                 rgb_image.save(os.path.join(directory, (name+".jpg")))
         except (FileNotFoundError, ValueError, OSError) as err:
-            print(f"Unable to convert an image to JPEG extension. - {err}")
+            DisplayErrorNotification(f"Unable to convert an image to JPEG extension. - {err}").display_notification()
+            #print(f"Unable to convert an image to JPEG extension. - {err}")
         self.removeFile(directory_to_png_image)
 
     def cleanImagesFolder(self, directory_to_folder: str, imagesNamesList: list):
@@ -140,9 +144,12 @@ class SeeMorePreprocessingSoftware:
         try:
             os.mkdir(path_to_folder)
         except FileExistsError:
-            print(f"The following folder {os.path.basename(path_to_folder)} exists.")
+            DisplayErrorNotification(f"The following folder {os.path.basename(path_to_folder)} exists.").display_notification()
+            #print(f"The following folder {os.path.basename(path_to_folder)} exists.")
         except FileNotFoundError:
-            print(f"The following folder or directory has not been found. Unable to create the new folder.")
+            DisplayErrorNotification(
+                f"The following folder or directory has not been found. Unable to create the new folder.").display_notification()
+            #print(f"The following folder or directory has not been found. Unable to create the new folder.")
 
     def createFoldersForGenerators(self, path_to_folder: str) -> tuple:
         """
@@ -170,8 +177,12 @@ class SeeMorePreprocessingSoftware:
             assert isinstance(file_destination, str), f"The following path: {file_destination} should not be a number."
             shutil.copyfile(file_source, file_destination)
         except shutil.SameFileError:
-            print(f"File source path: {file_source} and a path to place where the file is copied are the same.")
+            DisplayErrorNotification(
+                f"File source path: {file_source} and a path to place where the file is copied are the same.").display_notification()
+            #print(f"File source path: {file_source} and a path to place where the file is copied are the same.")
         except AssertionError as error_message:
-            print(error_message)
+            DisplayErrorNotification(error_message).display_notification()
+            #print(error_message)
         except IsADirectoryError as err:
-            print("Unable to copy the directory. The parameters should be a full path to image", err)
+            DisplayErrorNotification("Unable to copy the directory. The parameters should be a full path to image").display_notification()
+            #print("Unable to copy the directory. The parameters should be a full path to image", err)
