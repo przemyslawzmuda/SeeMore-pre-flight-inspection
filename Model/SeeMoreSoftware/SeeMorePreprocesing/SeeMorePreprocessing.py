@@ -12,7 +12,6 @@ class SeeMorePreprocessingSoftware:
     """
     - Pillar of OOP: By using encapsulation I have packaged the following functions into a blueprint
     that I can create multiple objects.
-    - Pillar of OOP: Abstraction - hide away information and only give access to things that are crucial.
     """
 
     @staticmethod
@@ -20,11 +19,12 @@ class SeeMorePreprocessingSoftware:
         """
         The following function makes a copy of a given zip file and creates at output_path a zip file
         without '__MACOSX' file as well as extract the cleaned zip file at output_path.
-        path_to_file: Path to the directory which contains data.
-        output_path: Place where the zip file will be extracted.
         """
+
         path_to_file = InputFilePathWithTkinter("Choose the file to unzip.").return_file_path()
-        output_path = InputDirectoryPathWithTkinter("Choose a direcotry to extract the zip file.").return_directory_path()
+        output_path = InputDirectoryPathWithTkinter("Choose a directory to extract "
+                                                    "the zip file.").return_directory_path()
+
         try:
             default_zip_file = zipfile.ZipFile(path_to_file, mode='r')
             without_rubbish_zip_file = zipfile.ZipFile(
@@ -45,19 +45,17 @@ class SeeMorePreprocessingSoftware:
                 zipDataSet.extractall(output_path)
         except IsADirectoryError as err:
             DisplayErrorNotification(err).display_notification()
-            #print("Zip file can not be converted because of:", err)
         except AttributeError as err:
             DisplayErrorNotification(err).display_notification()
-            #print("Zip file can not be converted because of:", err)
         time.sleep(2)
-        ShowInformationToUser(f"The process of unzipping of the {os.path.basename(path_to_file)} file has been completed successfully.").display_notification()
+        ShowInformationToUser(f"The process of unzipping of the {os.path.basename(path_to_file)} "
+                              f"file has been completed successfully.").display_notification()
 
     def removeFile(self, directory_to_file: str):
         try:
             os.remove(directory_to_file)
         except FileNotFoundError:
             DisplayErrorNotification("File not exists.").display_notification()
-            #print("File not exists.")
 
     def getDirectoryAndFileName(self, directory_to_file: str) -> tuple:
         """
@@ -65,6 +63,7 @@ class SeeMorePreprocessingSoftware:
         :param directory_to_file: Path to the data Set.
         :return: dataTuple: (directory_to_folder, file_name)
         """
+
         directory_to_folder = os.path.dirname(directory_to_file)  # return the directory name of pathname
         file_name = os.path.basename(directory_to_file)
         dataTuple = (directory_to_folder, file_name)
@@ -90,14 +89,13 @@ class SeeMorePreprocessingSoftware:
                 rgb_image.save(os.path.join(directory, (name+".jpg")))
         except (FileNotFoundError, ValueError, OSError) as err:
             DisplayErrorNotification(f"Unable to convert an image to JPEG extension. - {err}").display_notification()
-            #print(f"Unable to convert an image to JPEG extension. - {err}")
         self.removeFile(directory_to_png_image)
 
     def cleanImagesFolder(self, directory_to_folder: str, imagesNamesList: list):
         """
-        If the format of the image is different
-        than JPEG extension, the image is converted to that format. The JPEG extension is recommended for colourful
-        images by the TensorFlow documentation. During the process of cleaning, also the '.DS_Store' file is deleted.
+        If the format of the image is different than JPEG extension, the image is converted to that format.
+        The JPEG extension is recommended for colourful images by the TensorFlow documentation.
+        During the process of cleaning, also the '.DS_Store' file is deleted.
         :param directory_to_folder: which contains images
         :param imagesNamesList: list which contains names of the images
         """
@@ -131,25 +129,27 @@ class SeeMorePreprocessingSoftware:
         print(f"There are {heic_number} HEIC images converted to JPEG extension.")
         print(f"There are {png_number} PNG images converted to JPEG extension.")
         print(f"There are {jpg_number} images with JPEG extension.")
-        print(f"There is/are {dsFile_number} .DS_Store file/files which has been deleted online during converting process.")
+        print(f"There is/are {dsFile_number} .DS_Store file/files which has been deleted "
+              f"online during converting process.")
         print(f'Number of the images: {len(os.listdir(directory_to_folder))}.')
         print(f"Time of the image cleaning: {how_long} [HH:MM:SS].")
         print("----------------------------------------------------------------------------------")
 
     def createNewFolder(self, path_to_folder: str):
         """
-        The following function creates the new folder in a given path to folder as a parameter.
+        The following function creates a new folder in the given path to folder as a parameter.
         :param path_to_folder: Path into the folder which will be created.
         """
+
         try:
             os.mkdir(path_to_folder)
         except FileExistsError:
-            DisplayErrorNotification(f"The following folder {os.path.basename(path_to_folder)} exists.").display_notification()
-            #print(f"The following folder {os.path.basename(path_to_folder)} exists.")
+            DisplayErrorNotification(f"The following folder {os.path.basename(path_to_folder)} "
+                                     f"exists.").display_notification()
         except FileNotFoundError:
             DisplayErrorNotification(
-                f"The following folder or directory has not been found. Unable to create the new folder.").display_notification()
-            #print(f"The following folder or directory has not been found. Unable to create the new folder.")
+                f"The following folder or directory has not been found. Unable to create "
+                f"the new folder.").display_notification()
 
     def createFoldersForGenerators(self, path_to_folder: str) -> tuple:
         """
@@ -159,6 +159,7 @@ class SeeMorePreprocessingSoftware:
         :return: trainingDirectory, validationDirectory - directories into the training and validation data respectively.
         :rtype: tuple(str, str)
         """
+
         trainingDirectory = os.path.join(path_to_folder, "Training")
         validationDirectory = os.path.join(path_to_folder, "Validation")
         # map(give_me_function - action, give_me_parameters - data), returns a map object
@@ -170,19 +171,19 @@ class SeeMorePreprocessingSoftware:
         """
         The following function copies a file from file_source into the file_destination.
         :param file_source: entire path to the file
-        :param file_destination: entire path to file
+        :param file_destination: entire path to the file
         """
+
         try:
             assert isinstance(file_source, str), f"The following path: {file_source} should not be a number."
             assert isinstance(file_destination, str), f"The following path: {file_destination} should not be a number."
             shutil.copyfile(file_source, file_destination)
         except shutil.SameFileError:
             DisplayErrorNotification(
-                f"File source path: {file_source} and a path to place where the file is copied are the same.").display_notification()
-            #print(f"File source path: {file_source} and a path to place where the file is copied are the same.")
+                f"File source path: {file_source} and a path to place where the file "
+                f"is copied are the same.").display_notification()
         except AssertionError as error_message:
             DisplayErrorNotification(error_message).display_notification()
-            #print(error_message)
-        except IsADirectoryError as err:
-            DisplayErrorNotification("Unable to copy the directory. The parameters should be a full path to image").display_notification()
-            #print("Unable to copy the directory. The parameters should be a full path to image", err)
+        except IsADirectoryError:
+            DisplayErrorNotification("Unable to copy the directory. The parameters should be "
+                                     "a full path to image").display_notification()

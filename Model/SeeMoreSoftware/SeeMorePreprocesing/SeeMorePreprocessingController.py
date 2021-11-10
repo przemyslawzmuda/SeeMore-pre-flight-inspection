@@ -10,6 +10,9 @@ from Model.SeeMoreSoftware.SeeMorePreprocesing.SeeMorePreprocessing import SeeMo
 
 
 class PreprocessingController:
+    """
+    - Pillar of OOP: Abstraction - hide away information and only give access to things that are crucial.
+    """
 
     def __init__(self):
         self.preprocessSoftware = SeeMorePreprocessingSoftware()
