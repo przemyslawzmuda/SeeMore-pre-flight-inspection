@@ -10,6 +10,7 @@ from Model.SeeMoreSoftware.SeeMorePreprocesing.SeeMorePreprocessing import SeeMo
 
 
 class PreprocessingController:
+
     def __init__(self):
         self.preprocessSoftware = SeeMorePreprocessingSoftware()
 
@@ -17,10 +18,10 @@ class PreprocessingController:
         """
         The following function makes a process of cleaning a data set. It can works with one folder also with
         the main folder which contains subdirectories.
-        path_to_data_set: folder where all images are stored.
         """
 
-        path_to_data_set = InputDirectoryPathWithTkinter("Choose a file with data sets.").return_directory_path()
+        path_to_data_set = InputDirectoryPathWithTkinter("Choose a file with data sets in order to"
+                                                         " start a cleaning process.").return_directory_path()
 
         # dataSetDictionary = { 'path1':[images1, ...], 'path2':[images2, ...], ... }
         dataSetDictionary = LetsMeetData.createDictionaryPathsAndFiles(path_to_data_set)
@@ -31,26 +32,29 @@ class PreprocessingController:
 
     def createTrainingValidationDataSets(self):
         """
-        The following function creates the training and validation data sets. These data sets are essential
-        for ImageDataGenerator and for the neural networks.
-        Path where the default items for neural networks are stored.
-        Path where the Training and Validation data sets will be created.
+        The following function creates the training and validation data sets. These data sets are crucial
+        for ImageDataGenerator object and for the neural networks. User can indicate a directory where
+        the default items for neural networks are stored (default data set). Subsequently, User is able to choose
+        a directory where the Training and Validation data sets will be created with replicated images.
         """
+
         while True:
             try:
-                trainingDataSize = InputInt("Enter the size of the training set in [%] as an integer number: ").return_input_int()
-                assert (trainingDataSize in range(1, 100)), "Give the size of a training data set in range from 1% to "\
-                                                            "99%. - A training set shouldn\'t has 100% of the images\n"
+                trainingDataSize = InputInt("Enter the size of the training set in [%] as an "
+                                            "integer number: ").return_input_int()
+                assert (trainingDataSize in range(1, 100)), "Give the size of a training data set in range " \
+                                                            "from 1% to 99%. - A training set shouldn\'t " \
+                                                            "contains 100% of the images."
                 break
             except AssertionError as err_message:
                 DisplayErrorNotification(err_message).display_notification()
-                #print(err_message)
             except InputIntMismatchException as err_message:
                 DisplayErrorNotification(err_message).display_notification()
-                #print(err_message)
 
-        departue_path = InputDirectoryPathWithTkinter("Choose a directory where the default items for neural network are stored.").return_directory_path()
-        approach_path = InputDirectoryPathWithTkinter("Choose a directory where the Training and Validation data sets will be created.").return_directory_path()
+        departue_path = InputDirectoryPathWithTkinter("Choose a directory where the default items (original data sets)"
+                                                      " for neural network are stored.").return_directory_path()
+        approach_path = InputDirectoryPathWithTkinter("Choose a directory where the Training and Validation "
+                                                      "data sets will be created.").return_directory_path()
 
         # Express the trainingDataSize as a percentage value
         trainingDataSize /= 100
@@ -88,13 +92,16 @@ class PreprocessingController:
                 departue_path_image = os.path.join(keyPath, image)
                 approach_path_image = os.path.join(sub_folder_path_training, image)
                 self.preprocessSoftware.copyFile(departue_path_image, approach_path_image)
+
             for image in validationImagesList:
                 departue_path_image = os.path.join(keyPath, image)
                 approach_path_image = os.path.join(sub_folder_path_validation, image)
                 self.preprocessSoftware.copyFile(departue_path_image, approach_path_image)
+
         time.sleep(2)
         ShowInformationToUser(
-            "The process of creating Training and Validation data sets has been completed successfully.").display_notification()
+            "The process of creating Training and Validation data sets has "
+            "been completed successfully.").display_notification()
         time.sleep(1)
         ShowInformationToUser(
             f"There are {len(trainingImagesList)} images in the Training data set.").display_notification()
