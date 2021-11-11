@@ -21,9 +21,9 @@ class SeeMorePreprocessingSoftware:
         without '__MACOSX' file as well as extract the cleaned zip file at output_path.
         """
 
-        path_to_file = InputFilePathWithTkinter("Choose the file to unzip.").return_file_path()
+        path_to_file = InputFilePathWithTkinter("Choose the file to unzip.").runNotification()
         output_path = InputDirectoryPathWithTkinter("Choose a directory to extract "
-                                                    "the zip file.").return_directory_path()
+                                                    "the zip file.").runNotification()
 
         try:
             default_zip_file = zipfile.ZipFile(path_to_file, mode='r')
@@ -43,19 +43,19 @@ class SeeMorePreprocessingSoftware:
             default_zip_file.close()
             with zipfile.ZipFile(without_rubbish_zip_file.filename, mode='r') as zipDataSet:
                 zipDataSet.extractall(output_path)
+            time.sleep(2)
+            ShowInformationToUser(
+                "The process of unzipping of the file has been completed successfully.").runNotification()
         except IsADirectoryError as err:
-            DisplayErrorNotification(err).display_notification()
+            DisplayErrorNotification(err).runNotification()
         except AttributeError as err:
-            DisplayErrorNotification(err).display_notification()
-        time.sleep(2)
-        ShowInformationToUser(f"The process of unzipping of the {os.path.basename(path_to_file)} "
-                              f"file has been completed successfully.").display_notification()
+            DisplayErrorNotification(err).runNotification()
 
     def removeFile(self, directory_to_file: str):
         try:
             os.remove(directory_to_file)
         except FileNotFoundError:
-            DisplayErrorNotification("File not exists.").display_notification()
+            DisplayErrorNotification("File not exists.").runNotification()
 
     def getDirectoryAndFileName(self, directory_to_file: str) -> tuple:
         """
@@ -88,7 +88,7 @@ class SeeMorePreprocessingSoftware:
                 rgb_image = image.convert("RGB")
                 rgb_image.save(os.path.join(directory, (name+".jpg")))
         except (FileNotFoundError, ValueError, OSError) as err:
-            DisplayErrorNotification(f"Unable to convert an image to JPEG extension. - {err}").display_notification()
+            DisplayErrorNotification(f"Unable to convert an image to JPEG extension. - {err}").runNotification()
         self.removeFile(directory_to_png_image)
 
     def cleanImagesFolder(self, directory_to_folder: str, imagesNamesList: list):
@@ -145,11 +145,11 @@ class SeeMorePreprocessingSoftware:
             os.mkdir(path_to_folder)
         except FileExistsError:
             DisplayErrorNotification(f"The following folder {os.path.basename(path_to_folder)} "
-                                     f"exists.").display_notification()
+                                     f"exists.").runNotification()
         except FileNotFoundError:
             DisplayErrorNotification(
                 f"The following folder or directory has not been found. Unable to create "
-                f"the new folder.").display_notification()
+                f"the new folder.").runNotification()
 
     def createFoldersForGenerators(self, path_to_folder: str) -> tuple:
         """
@@ -181,9 +181,9 @@ class SeeMorePreprocessingSoftware:
         except shutil.SameFileError:
             DisplayErrorNotification(
                 f"File source path: {file_source} and a path to place where the file "
-                f"is copied are the same.").display_notification()
+                f"is copied are the same.").runNotification()
         except AssertionError as error_message:
-            DisplayErrorNotification(error_message).display_notification()
+            DisplayErrorNotification(error_message).runNotification()
         except IsADirectoryError:
             DisplayErrorNotification("Unable to copy the directory. The parameters should be "
-                                     "a full path to image").display_notification()
+                                     "a full path to image").runNotification()

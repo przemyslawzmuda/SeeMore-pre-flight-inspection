@@ -24,7 +24,7 @@ class PreprocessingController:
         """
 
         path_to_data_set = InputDirectoryPathWithTkinter("Choose a file with data sets in order to"
-                                                         " start a cleaning process.").return_directory_path()
+                                                         " start a cleaning process.").runNotification()
 
         # dataSetDictionary = { 'path1':[images1, ...], 'path2':[images2, ...], ... }
         dataSetDictionary = LetsMeetData.createDictionaryPathsAndFiles(path_to_data_set)
@@ -50,14 +50,14 @@ class PreprocessingController:
                                                             "contains 100% of the images."
                 break
             except AssertionError as err_message:
-                DisplayErrorNotification(err_message).display_notification()
+                DisplayErrorNotification(err_message).runNotification()
             except InputIntMismatchException as err_message:
-                DisplayErrorNotification(err_message).display_notification()
+                DisplayErrorNotification(err_message).runNotification()
 
         departue_path = InputDirectoryPathWithTkinter("Choose a directory where the default items (original data sets)"
-                                                      " for neural network are stored.").return_directory_path()
+                                                      " for neural network are stored.").runNotification()
         approach_path = InputDirectoryPathWithTkinter("Choose a directory where the Training and Validation "
-                                                      "data sets will be created.").return_directory_path()
+                                                      "data sets will be created.").runNotification()
 
         # Express the trainingDataSize as a percentage value
         trainingDataSize /= 100
@@ -104,10 +104,10 @@ class PreprocessingController:
         time.sleep(2)
         ShowInformationToUser(
             "The process of creating Training and Validation data sets has "
-            "been completed successfully.").display_notification()
+            "been completed successfully.").runNotification()
         time.sleep(1)
         ShowInformationToUser(
-            f"There are {len(trainingImagesList)} images in the Training data set.").display_notification()
+            f"There are {len(trainingImagesList)} images in the Training data set.").runNotification()
         time.sleep(1)
         ShowInformationToUser(
-            f"There are {len(validationImagesList)} images in the Validation data set.").display_notification()
+            f"There are {len(validationImagesList)} images in the Validation data set.").runNotification()

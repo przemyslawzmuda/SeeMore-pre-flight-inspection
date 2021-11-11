@@ -1,4 +1,5 @@
 import tkinter
+from tkinter import filedialog, messagebox
 
 
 class ConfigureTkinterNotification:
@@ -12,8 +13,10 @@ class ConfigureTkinterNotification:
         """
         pass
 
-    def runApp(self):
+    def runNotification(self):
         window_root = tkinter.Tk()
         window_root.withdraw()
-        self.configureNotification()
+        variable = self.configureNotification()
         window_root.destroy()
+        if variable is not None:
+            return variable
