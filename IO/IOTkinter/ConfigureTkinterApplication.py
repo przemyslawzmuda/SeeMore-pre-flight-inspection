@@ -1,15 +1,19 @@
 import tkinter
 
 
-class RunTkinterApplication:
+class ConfigureTkinterNotification:
+
     def __init__(self, message):
         self.message = message
 
-    def displayInformation(self):
+    def configureNotification(self):
+        """
+        Override that function in the child class.
+        """
         pass
 
     def runApp(self):
         window_root = tkinter.Tk()
         window_root.withdraw()
-        self.displaySomething()
+        self.configureNotification()
         window_root.destroy()
