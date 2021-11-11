@@ -1,5 +1,5 @@
 from tkinter.simpledialog import askinteger
-from IO.TkinterApplication import RunTkinterApplication
+from IO.IOTkinter.TkinterApplication import RunTkinterApplication
 
 
 class AskUserForIntegerNumber(RunTkinterApplication):

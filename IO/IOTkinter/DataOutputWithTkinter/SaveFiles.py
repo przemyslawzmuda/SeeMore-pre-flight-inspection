@@ -1,5 +1,5 @@
 import os
-from IO.ChoosePath import InputDirectoryPathWithTkinter
+from IO.IOTkinter.DataInputWithTkinter.ChoosePath import InputDirectoryPathWithTkinter
 from Model.SeeMoreSoftware.SeeMorePreprocesing.SeeMorePreprocessing import SeeMorePreprocessingSoftware
 
 

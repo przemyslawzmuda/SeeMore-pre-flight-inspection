@@ -5,7 +5,7 @@ class RunTkinterApplication:
     def __init__(self, message):
         self.message = message
 
-    def displaySomething(self):
+    def displayInformation(self):
         pass
 
     def runApp(self):

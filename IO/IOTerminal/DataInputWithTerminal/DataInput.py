@@ -1,5 +1,5 @@
 import os
-from IO.DisplayNotifications import DisplayErrorNotification
+from IO.IOTkinter.DataOutputWithTkinter.DisplayNotifications import DisplayErrorNotification
 from Exception.PathException import NoSuchDirectoryException
 from Exception.InputIntMismatchException import InputIntMismatchException
 

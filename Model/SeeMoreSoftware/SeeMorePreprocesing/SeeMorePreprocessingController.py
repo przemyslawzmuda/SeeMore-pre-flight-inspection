@@ -1,11 +1,11 @@
 import os
 import time
 import random
-from IO.DataInput import InputInt
-from IO.ChoosePath import InputDirectoryPathWithTkinter
+from IO.IOTerminal.DataInputWithTerminal.DataInput import InputInt
+from IO.IOTkinter.DataInputWithTkinter.ChoosePath import InputDirectoryPathWithTkinter
 from Model.SeeMoreSoftware.LetsMeetData import LetsMeetData
 from Exception.InputIntMismatchException import InputIntMismatchException
-from IO.DisplayNotifications import ShowInformationToUser, DisplayErrorNotification
+from IO.IOTkinter.DataOutputWithTkinter.DisplayNotifications import ShowInformationToUser, DisplayErrorNotification
 from Model.SeeMoreSoftware.SeeMorePreprocesing.SeeMorePreprocessing import SeeMorePreprocessingSoftware
 
 

@@ -1,9 +1,9 @@
 import sys
 import time
-from IO.DataInput import InputInt
+from IO.IOTerminal.DataInputWithTerminal.DataInput import InputInt
 from EnumUserOptions import UserChoiceOptions
 from Exception.OptionException import NoSuchOptionException
-from IO.DisplayNotifications import DisplayErrorNotification
+from IO.IOTkinter.DataOutputWithTkinter.DisplayNotifications import DisplayErrorNotification
 from Exception.InputIntMismatchException import InputIntMismatchException
 from Model.SeeMoreSoftware.SeeMorePreprocesing import SeeMorePreprocessingController
 from Model.SeeMoreSoftware.SeeMorePreprocesing.SeeMorePreprocessing import SeeMorePreprocessingSoftware

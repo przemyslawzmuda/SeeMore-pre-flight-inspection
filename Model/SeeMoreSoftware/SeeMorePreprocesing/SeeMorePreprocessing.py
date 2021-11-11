@@ -4,8 +4,8 @@ import shutil
 import pyheif
 import zipfile
 from PIL import Image
-from IO.ChoosePath import InputFilePathWithTkinter, InputDirectoryPathWithTkinter
-from IO.DisplayNotifications import ShowInformationToUser, DisplayErrorNotification
+from IO.IOTkinter.DataInputWithTkinter.ChoosePath import InputFilePathWithTkinter, InputDirectoryPathWithTkinter
+from IO.IOTkinter.DataOutputWithTkinter.DisplayNotifications import ShowInformationToUser, DisplayErrorNotification
 
 
 class SeeMorePreprocessingSoftware:
