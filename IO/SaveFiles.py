@@ -31,7 +31,7 @@ class SaveTensorFlowModel:
         The SavedModel format is another way to serialize models. Models saved in this format can be restored using
         tf.keras.models.load_model and are compatible with TensorFlow Serving.
         """
-        
+
         directory_path = self.chooseDirectory.return_directory_path()
         path_to_save_model = os.path.join(directory_path, "Saved-TensorFlow-Models")
         self.preprocessSoftware.createNewFolder(path_to_save_model)
