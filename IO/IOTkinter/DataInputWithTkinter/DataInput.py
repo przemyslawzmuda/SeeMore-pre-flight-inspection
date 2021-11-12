@@ -4,11 +4,9 @@ from IO.IOTkinter.ConfigureTkinterApplication import ConfigureTkinterNotificatio
 
 class AskUserForIntegerNumber(ConfigureTkinterNotification):
 
-    def __init__(self, message, min_value, max_value):
+    def __init__(self, message):
         super().__init__(message)
-        self.min_value = min_value
-        self.max_value = max_value
 
     def configureNotification(self) -> int:
-        int_number = askinteger("Enter number", self.message, minvalue=self.min_value, maxvalue=self.max_value)
+        int_number = askinteger("Enter number", self.message)
         return int_number

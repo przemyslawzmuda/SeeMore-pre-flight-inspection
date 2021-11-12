@@ -8,3 +8,15 @@ class NoSuchDirectoryException(Exception):
 
     def __str__(self) -> str:
         return f"The following directory ---> {self.input_directory} not exists.\nPlease, enter the correct directory."
+
+
+class NoChosenFilePathException(Exception):
+
+    def __str__(self) -> str:
+        return "The file has not been chosen."
+
+
+class NoChosenDirectoryPathException(Exception):
+
+    def __str__(self):
+        return "The directory has not been chosen."

@@ -4,6 +4,7 @@ import shutil
 import pyheif
 import zipfile
 from PIL import Image
+from Exception.PathException import NoChosenFilePathException, NoChosenDirectoryPathException
 from IO.IOTkinter.DataInputWithTkinter.ChoosePath import InputFilePathWithTkinter, InputDirectoryPathWithTkinter
 from IO.IOTkinter.DataOutputWithTkinter.DisplayNotifications import ShowInformationToUser, DisplayErrorNotification
 
@@ -21,9 +22,16 @@ class SeeMorePreprocessingSoftware:
         without '__MACOSX' file as well as extract the cleaned zip file at output_path.
         """
 
-        path_to_file = InputFilePathWithTkinter("Choose the file to unzip.").runNotification()
-        output_path = InputDirectoryPathWithTkinter("Choose a directory to extract "
-                                                    "the zip file.").runNotification()
+        try:
+            path_to_file = InputFilePathWithTkinter("Choose the file to unzip.").runNotification()
+        except NoChosenFilePathException as error_message:
+            DisplayErrorNotification(error_message).runNotification()
+
+        try:
+            output_path = InputDirectoryPathWithTkinter("Choose a directory to extract "
+                                                        "the zip file.").runNotification()
+        except NoChosenDirectoryPathException as error_message:
+            DisplayErrorNotification(error_message).runNotification()
 
         try:
             default_zip_file = zipfile.ZipFile(path_to_file, mode='r')
@@ -50,6 +58,9 @@ class SeeMorePreprocessingSoftware:
             DisplayErrorNotification(err).runNotification()
         except AttributeError as err:
             DisplayErrorNotification(err).runNotification()
+        except FileNotFoundError:
+            DisplayErrorNotification("The zip file has not been chosen. "
+                                     "Choose available option").runNotification()
 
     def removeFile(self, directory_to_file: str):
         try:
@@ -123,7 +134,7 @@ class SeeMorePreprocessingSoftware:
                         elif image_format == "JPEG":
                             jpg_number += 1
                 except (FileNotFoundError, ValueError, OSError) as err:
-                    print(f"Unable to convert an image to JPEG extension. - {err}")
+                    DisplayErrorNotification(f"Unable to convert an image to JPEG extension. - {err}").runNotification()
         how_long = time.strftime("%H:%M:%S", time.gmtime(time.time() - start_process))
         print(f"\nInformation about the {os.path.basename(directory_to_folder)} data set:")
         print(f"There are {heic_number} HEIC images converted to JPEG extension.")
@@ -160,12 +171,17 @@ class SeeMorePreprocessingSoftware:
         :rtype: tuple(str, str)
         """
 
-        trainingDirectory = os.path.join(path_to_folder, "Training")
-        validationDirectory = os.path.join(path_to_folder, "Validation")
-        # map(give_me_function - action, give_me_parameters - data), returns a map object
-        # doesn't modify the data parameter - immutable data
-        any(map(self.createNewFolder, [path_to_folder, trainingDirectory, validationDirectory]))
-        return trainingDirectory, validationDirectory  # tuple -> ()
+        try:
+            mainDirectory = os.path.join(path_to_folder, "SeeMoreDataSets")
+            trainingDirectory = os.path.join(mainDirectory, "Training")
+            validationDirectory = os.path.join(mainDirectory, "Validation")
+            # map(give_me_function - action, give_me_parameters - data), returns a map object
+            # doesn't modify the data parameter - immutable data
+            any(map(self.createNewFolder, [path_to_folder, trainingDirectory, validationDirectory]))
+            return trainingDirectory, validationDirectory  # tuple -> ()
+        except OSError:
+            DisplayErrorNotification("Process of creating folders for learning, "
+                                     "have not been completed.").runNotification()
 
     def copyFile(self, file_source: str, file_destination: str):
         """

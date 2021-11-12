@@ -7,6 +7,7 @@ from Model.SeeMoreSoftware.LetsMeetData import LetsMeetData
 from Exception.InputIntMismatchException import InputIntMismatchException
 from IO.IOTkinter.DataOutputWithTkinter.DisplayNotifications import ShowInformationToUser, DisplayErrorNotification
 from Model.SeeMoreSoftware.SeeMorePreprocesing.SeeMorePreprocessing import SeeMorePreprocessingSoftware
+from IO.IOTkinter.DataInputWithTkinter.DataInput import AskUserForIntegerNumber
 
 
 class PreprocessingController:
@@ -43,8 +44,8 @@ class PreprocessingController:
 
         while True:
             try:
-                trainingDataSize = InputInt("Enter the size of the training set in [%] as an "
-                                            "integer number: ").return_input_int()
+                trainingDataSize = AskUserForIntegerNumber("Enter the size of the training set in [%] "
+                                                           "as an integer number").runNotification()
                 assert (trainingDataSize in range(1, 100)), "Give the size of a training data set in range " \
                                                             "from 1% to 99%. - A training set shouldn\'t " \
                                                             "contains 100% of the images."
