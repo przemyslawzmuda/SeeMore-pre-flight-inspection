@@ -1,5 +1,3 @@
-import sys
-import tkinter
 from tkinter import messagebox
 from IO.IOTkinter.ConfigureTkinterApplication import ConfigureTkinterNotification
 

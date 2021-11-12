@@ -32,14 +32,14 @@ class AppController:
                 choiceEnumOption = UserChoiceOptions.returnChoiceOptionFromValuesList(choiceNumber)
                 return choiceEnumOption
             except InputIntMismatchException as error_message:
-                DisplayErrorNotification(error_message).display_notification()
+                DisplayErrorNotification(error_message).runNotification()
             except NoSuchOptionException as error_message:
-                DisplayErrorNotification(error_message).display_notification()
+                DisplayErrorNotification(error_message).runNotification()
 
     def switchOptionInDictionaryPossibilities(self, option):
         dictionaryOptions = {
             0: self.closeApp,
-            1: SeeMorePreprocessingSoftware.cleanAndExtractZipData,
+            1: SeeMorePreprocessingSoftware.extractZipFile,
             2: self.preprocessData.cleanImagesDataSet,
             3: self.preprocessData.createTrainingValidationDataSets
         }

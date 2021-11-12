@@ -6,7 +6,7 @@ import zipfile
 from PIL import Image
 from Exception.PathException import NoChosenFilePathException, NoChosenDirectoryPathException
 from IO.IOTkinter.DataInputWithTkinter.ChoosePath import InputFilePathWithTkinter, InputDirectoryPathWithTkinter
-from IO.IOTkinter.DataOutputWithTkinter.DisplayNotifications import ShowInformationToUser, DisplayErrorNotification
+from IO.IOTkinter.DataOutputWithTkinter.DisplayNotifications import ShowInformationToUser, DisplayErrorNotification, BreakWorkingLoopFunction
 
 
 class SeeMorePreprocessingSoftware:
@@ -16,51 +16,61 @@ class SeeMorePreprocessingSoftware:
     """
 
     @staticmethod
-    def cleanAndExtractZipData():
+    def cleanAndExtractZipData(path_to_file: str, output_path: str):
+        default_zip_file = zipfile.ZipFile(path_to_file, mode='r')
+        without_rubbish_zip_file = zipfile.ZipFile(
+            os.path.join(output_path, 'cleaned-' + os.path.basename(path_to_file)), mode='w')
+        # without_rubbish_zip_file is a zipfile.ZipFile object: <zipfile.ZipFile filename='pathToZipFile' mode=''>
+        for item in default_zip_file.infolist():
+            '''
+            infolist() return each file step by step hierarchically (everything as well as hidden files)
+            item - file in the directory
+            < ZipInfo filename = 'directory' compress_type = ... filemode = '' file_size = 688 compress_size = 334 >
+            '''
+            file_to_copy = default_zip_file.read(item.filename)  # Return the bytes of the file name in the archive.
+            if not str(item.filename).startswith("__MACOSX"):
+                without_rubbish_zip_file.writestr(item, file_to_copy)  # ZipFile.writestr(zinfo_or_arcname, data)
+        without_rubbish_zip_file.close()
+        default_zip_file.close()
+        with zipfile.ZipFile(without_rubbish_zip_file.filename, mode='r') as zipDataSet:
+            zipDataSet.extractall(output_path)
+        time.sleep(2)
+        ShowInformationToUser(
+            "The process of unzipping of the file has been completed successfully.").runNotification()
+
+    @staticmethod
+    def extractZipFile():
         """
         The following function makes a copy of a given zip file and creates at output_path a zip file
         without '__MACOSX' file as well as extract the cleaned zip file at output_path.
         """
 
-        try:
-            path_to_file = InputFilePathWithTkinter("Choose the file to unzip.").runNotification()
-        except NoChosenFilePathException as error_message:
-            DisplayErrorNotification(error_message).runNotification()
+        while True:
+            try:
+                path_to_file = InputFilePathWithTkinter("Choose the file to unzip.").runNotification()
+            except NoChosenFilePathException as error_message:
+                DisplayErrorNotification(error_message).runNotification()
 
-        try:
-            output_path = InputDirectoryPathWithTkinter("Choose a directory to extract "
-                                                        "the zip file.").runNotification()
-        except NoChosenDirectoryPathException as error_message:
-            DisplayErrorNotification(error_message).runNotification()
+            try:
+                output_path = InputDirectoryPathWithTkinter("Choose a directory to extract "
+                                                            "the zip file.").runNotification()
+            except NoChosenDirectoryPathException as error_message:
+                DisplayErrorNotification(error_message).runNotification()
 
-        try:
-            default_zip_file = zipfile.ZipFile(path_to_file, mode='r')
-            without_rubbish_zip_file = zipfile.ZipFile(
-                os.path.join(output_path, 'cleaned-' + os.path.basename(path_to_file)), mode='w')
-            # without_rubbish_zip_file is a zipfile.ZipFile object: <zipfile.ZipFile filename='pathToZipFile' mode=''>
-            for item in default_zip_file.infolist():
-                '''
-                infolist() return each file step by step hierarchically (everything as well as hidden files)
-                item - file in the directory
-                < ZipInfo filename = 'directory' compress_type = ... filemode = '' file_size = 688 compress_size = 334 >
-                '''
-                file_to_copy = default_zip_file.read(item.filename)  # Return the bytes of the file name in the archive.
-                if not str(item.filename).startswith("__MACOSX"):
-                    without_rubbish_zip_file.writestr(item, file_to_copy)  # ZipFile.writestr(zinfo_or_arcname, data)
-            without_rubbish_zip_file.close()
-            default_zip_file.close()
-            with zipfile.ZipFile(without_rubbish_zip_file.filename, mode='r') as zipDataSet:
-                zipDataSet.extractall(output_path)
-            time.sleep(2)
-            ShowInformationToUser(
-                "The process of unzipping of the file has been completed successfully.").runNotification()
-        except IsADirectoryError as err:
-            DisplayErrorNotification(err).runNotification()
-        except AttributeError as err:
-            DisplayErrorNotification(err).runNotification()
-        except FileNotFoundError:
-            DisplayErrorNotification("The zip file has not been chosen. "
-                                     "Choose available option").runNotification()
+            try:
+                SeeMorePreprocessingSoftware.cleanAndExtractZipData(path_to_file, output_path)
+            except IsADirectoryError as err:
+                DisplayErrorNotification(err).runNotification()
+            except AttributeError as err:
+                DisplayErrorNotification(err).runNotification()
+            except FileNotFoundError:
+                DisplayErrorNotification("The zip file has not been chosen. "
+                                         "Choose available option").runNotification()
+            except UnboundLocalError:
+                answer = BreakWorkingLoopFunction("Unable to unzip the file.\nDo You want to choose "
+                                                  "another process?").runNotification()
+                if answer:
+                    break
 
     def removeFile(self, directory_to_file: str):
         try:
