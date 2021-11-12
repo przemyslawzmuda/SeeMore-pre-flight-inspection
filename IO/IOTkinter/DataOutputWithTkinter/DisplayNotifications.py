@@ -1,4 +1,5 @@
-import tkinter as tk
+import sys
+import tkinter
 from tkinter import messagebox
 from IO.IOTkinter.ConfigureTkinterApplication import ConfigureTkinterNotification
 
@@ -19,3 +20,11 @@ class DisplayErrorNotification(ConfigureTkinterNotification):
 
     def configureNotification(self):
         messagebox.showwarning("Error information", self.message)
+
+
+class BreakWorkingLoopFunction(ConfigureTkinterNotification):
+    def __init__(self, message):
+        super().__init__(message)
+
+    def configureNotification(self):
+        return messagebox.askyesno(title="confirmation", message=self.message)
