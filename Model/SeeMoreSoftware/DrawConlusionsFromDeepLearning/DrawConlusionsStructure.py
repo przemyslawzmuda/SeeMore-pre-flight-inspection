@@ -17,6 +17,7 @@ class BaselineGraph:
         self.graph_size = graph_size
         self.column_num = columns_number
         self.row_num = rows_number
+        self.num_sub_graphs = columns_number * rows_number
 
     def showSubGraph(self, x_axis_value: list, y_axis_value: list, label_name: str):
         mpyplot.plot(x_axis_value, y_axis_value, label=label_name)
