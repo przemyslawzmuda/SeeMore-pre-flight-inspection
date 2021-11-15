@@ -217,3 +217,14 @@ class ConclusionsStructure:
 
         output_tuple = (extended_normalized_image, image_prediction_class)
         return output_tuple
+
+    def plotPredictedImage(self, data_to_plot: tuple):
+        """
+        The following function display a custom image with the estimated name.
+        :param data_to_plot: Data in tuple obtained from makePredictionForOneImage() function.
+        """
+        image_to_plot, title_image = data_to_plot
+
+        mpyplot.imshow(image_to_plot)
+        mpyplot.title(f"Prediction: {title_image}")
+        mpyplot.axis(False)
