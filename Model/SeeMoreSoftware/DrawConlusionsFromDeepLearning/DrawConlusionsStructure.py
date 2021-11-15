@@ -92,7 +92,7 @@ class ConclusionsStructure:
         except IOError:
             DisplayErrorNotification("Unable to load a model because of an invalid savefile.").runNotification()
 
-    def normalizeImage(self, path_to_image: str, image_shape: int):
+    def normalizeImage(self, path_to_image: str, image_shape: int) -> object:
         """
         The following function enables to upload a custom image and prepare it in order to make a prediction
         using convolutional neural network. The function transforms a custom image into a tensor matrix and reshapes it
@@ -102,13 +102,13 @@ class ConclusionsStructure:
         neural network.
         :param path_to_image: Absolute path into the custom image.
         :param image_shape: The desired shape of the normalized image.
-        :return: tensor image.
+        :return: <class 'tensorflow.python.framework.ops.EagerTensor'>
         """
 
         try:
             '''
-            This operation returns a tensor with the entire contents of the input filename. It does not do any parsing, it 
-            just returns the contents as they are. Usually, this is the first step in the input pipeline. 
+            This operation returns a tensor with the entire contents of the input filename. It does not do any parsing, 
+            it just returns the contents as they are. Usually, this is the first step in the input pipeline. 
             Reads the contents of file:
             '''
             image = tfl.io.read_file(path_to_image)
@@ -122,22 +122,35 @@ class ConclusionsStructure:
             Args: 
             contents=image -> A Tensor of type string. 0-D. The encoded image bytes.
             channels=3 -> An optional int. Defaults to 0. Number of color channels for the decoded image.
-            expand_animations=True -> An optional bool. Defaults to True. Controls the shape of the returned op's output. 
-            If True, the returned op will produce a 3-D tensor for PNG, JPEG, and BMP files; and a 4-D tensor for all GIFs, 
-            whether animated or not. If, False, the returned op will produce a 3-D tensor for all file types and will 
-            truncate animated GIFs to the first frame.
+            expand_animations=True -> An optional bool. Defaults to True. Controls the shape of the returned 
+            op's output. If True, the returned op will produce a 3-D tensor for PNG, JPEG, and BMP files; 
+            and a 4-D tensor for all GIFs, whether animated or not. If, False, the returned op will produce a 3-D tensor 
+            for all file types and will truncate animated GIFs to the first frame.
             '''
             decoded_image = tfl.io.decode_image(image, channels=3, expand_animations=True)  # True is default value
+            print(decoded_image)
+            '''
+            decoded_image:
+
+            tf.Tensor(
+            [[[168 161 117]
+              [168 161 117]
+              [168 161 117]
+              ...
+              [223 210 176]
+              [223 210 176]
+              [223 210 176]]], shape=(4032, 3024, 3), dtype=uint8)
+            '''
 
             '''
             Resize the image into the prescribed size suing the specified method.
-            
+
             Args:
             images=decoded_image -> 4-D Tensor of shape [batch, height, width, channels] or 
                 3-D Tensor of shape [height, width, channels].
             size=[image_shape, image_shape] -> A 1-D int32 Tensor of 2 elements: new_height, new_width. 
                 The new size for the images.
-                
+
             Returns:
             If images was 4-D, a 4-D float Tensor of shape [batch, new_height, new_width, channels]. 
             If images was 3-D, a 3-D float Tensor of shape [new_height, new_width, channels].
@@ -147,7 +160,60 @@ class ConclusionsStructure:
             # Normalize an image into the float pixels value
             normalized_image = resized_image / 255.0
 
+            # <class 'tensorflow.python.framework.ops.EagerTensor'>
             return normalized_image
+
+            '''
+            The following function returns a Tensor() data type image:
+
+            tf.Tensor(
+                [[[0.65882355 0.6313726  0.45882353]
+                  [0.6509804  0.62352943 0.4509804]
+                 [0.64705884 0.61960787 0.45490196]
+                    ...
+            [0.8745098
+            0.8235294
+            0.6862745]
+            [0.8745098  0.8235294  0.6862745]
+            [0.8666667
+            0.8156863
+            0.6784314]]], shape = (400, 400, 3), dtype = float32)
+            '''
 
         except ValueError as err:
             DisplayErrorNotification(f"Unable to normalize an image because of {err}.").runNotification()
+
+    def makePredictionForOneImage(self, path_to_image: str, image_shape: int, data_generator: object,
+                                  model: object) -> tuple:
+        """
+        The following function reads a custom image, performs a process of normalizing that image as well as this,
+        makes a prediction for that image.
+        :param path_to_image: Absolute path into the image,
+        :param image_shape: size=[image_shape, image_shape] -> A 1-D int32 Tensor of 2 elements: new_height, new_width.
+                The new size for the images.
+        :param data_generator: A configured data generator used during the training.
+        :param model: Configured Neural Network model used during the training.
+        :return: output_tuple = (extended_normalized_image, image_prediction_class)
+        """
+
+        # Upload a custom image and preprocess it
+        normalized_image = self.normalizeImage(path_to_image, image_shape)
+        # normalized_image object: tf.Tensor([...], shape = (image_shape, image_shape, 3), dtype = float32)
+
+        # Extend the dimensions of the normalized image into a 4D format -> 'batch image' = (batch_size, size, size, 3)
+        extended_normalized_image = tfl.expand_dims(normalized_image, axis=0)
+
+        # Make a prediction
+        image_prediction = model.predict(extended_normalized_image)
+
+        # Get class names from generator
+        class_names_from_generator = self.getClassNamesFromGenerator(data_generator)
+
+        # Add logic for multi-class in order to choose the correct class's name
+        if len(image_prediction[0]) > 1:
+            image_prediction_class = class_names_from_generator[tfl.argmax(image_prediction[0])]
+        else:
+            image_prediction_class = class_names_from_generator[int(tfl.round(image_prediction[0]))]
+
+        output_tuple = (extended_normalized_image, image_prediction_class)
+        return output_tuple
