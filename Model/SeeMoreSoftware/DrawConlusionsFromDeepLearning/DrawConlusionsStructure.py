@@ -204,18 +204,19 @@ class ConclusionsStructure:
         extended_normalized_image = tfl.expand_dims(normalized_image, axis=0)
 
         # Make a prediction
-        image_prediction = model.predict(extended_normalized_image)
+        image_predictions = model.predict(extended_normalized_image)
 
         # Get class names from generator
         class_names_from_generator = self.getClassNamesFromGenerator(data_generator)
 
         # Add logic for multi-class in order to choose the correct class's name
-        if len(image_prediction[0]) > 1:
-            image_prediction_class = class_names_from_generator[tfl.argmax(image_prediction[0])]
+        if len(image_predictions[0]) > 1:
+            image_prediction_class = class_names_from_generator[tfl.argmax(image_predictions[0])]
         else:
-            image_prediction_class = class_names_from_generator[int(tfl.round(image_prediction[0]))]
+            image_prediction_class = class_names_from_generator[int(tfl.round(image_predictions[0]))]
 
-        output_tuple = (extended_normalized_image, image_prediction_class)
+        # Tuple is a collection which is ordered and unchangeable. Allows duplicate members.
+        output_tuple = tuple((extended_normalized_image, image_prediction_class, image_predictions))
         return output_tuple
 
     def plotPredictedImage(self, data_to_plot: tuple):
@@ -223,8 +224,37 @@ class ConclusionsStructure:
         The following function display a custom image with the estimated name.
         :param data_to_plot: Data in tuple obtained from makePredictionForOneImage() function.
         """
-        image_to_plot, title_image = data_to_plot
+        image_to_plot, title_image, image_predictions = data_to_plot
 
         mpyplot.imshow(image_to_plot)
         mpyplot.title(f"Prediction: {title_image}")
         mpyplot.axis(False)
+
+    def plotPredictedValues(self, image_to_predict: object, title_image_to_predict: str,
+                            image_predictions_values_list: list):
+
+        # Assign class numbers into the variable in order to plot the probability for each class
+        class_numbers_to_predictions = len(image_predictions_values_list[0])
+
+        # Get or set the current tick locations and labels of the x-axis.
+        mpyplot.xticks(range(class_numbers_to_predictions))
+
+        '''
+        Plot yticks - Make a bar plot
+        The bars are positioned at x with the given alignment. Their dimensions are given by height and width.
+        The vertical baseline is bottom (default 0).
+        
+        matplotlib.pyplot.bar(x, height, width=0.8, bottom=None, *, align='center', data=None, **kwargs)
+        x: float or array-like -> The x coordinates of the bars. See also align for 
+            the alignment of the bars to the coordinates. -> range(class_numbers_to_predictions)
+        height: float or array-like -> The height(s) of the bars. -> image_predictions_values_list
+        '''
+        mpyplot.bar(range(class_numbers_to_predictions), image_predictions_values_list, color="#262179")
+
+        # Get or set the y-limits of the current axes.
+        mpyplot.ylim([0, 1])
+
+        mpyplot.title(f"Prediction: {title_image_to_predict}")
+        mpyplot.ylabel("Probability [%]")
+        mpyplot.xlabel("Classes names")
+        mpyplot.grid(axis="y")
