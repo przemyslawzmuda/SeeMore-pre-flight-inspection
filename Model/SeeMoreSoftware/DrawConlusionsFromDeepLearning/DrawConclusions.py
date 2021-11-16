@@ -1,7 +1,12 @@
 import matplotlib.pyplot as mpyplot
+from DrawConlusionsStructure import ConclusionsStructure
+from IO.IOTkinter.DataInputWithTkinter.ChoosePath import InputFilePathWithTkinter
+from IO.IOTkinter.DataInputWithTkinter.DataInput import AskUserForIntegerNumber, AskUserForString
 
 
 class DrawConclusionsController:
+    def __init__(self):
+        self.preprocessConlusions = ConclusionsStructure()
 
     def plotLossAccuracyGraph(self, model_history):
 
@@ -34,4 +39,31 @@ class DrawConclusionsController:
 
         mpyplot.show()
 
+    def plotPredictionsForChosenCustomImage(self):
 
+        path_to_custom_image = InputFilePathWithTkinter(
+            "Choose a path for custom image in order to make a prediction and subsequently plot a graph with "
+            "the prediction.").runNotification()
+
+        target_custom_image_shape = AskUserForIntegerNumber(
+            "Enter the target shape of the custom image").runNotification()
+
+        data_from_configured_generator = AskUserForString(
+            "Enter the name of the configured ImageDataGenerator object in order to "
+            "retrieve a class's names").runNotification()
+
+        neural_network_model = InputFilePathWithTkinter(
+            "Choose a path to the saved neural network model").runNotification()
+
+        data_to_plot_tuple = \
+            self.preprocessConlusions.makePredictionForOneImage(path_to_custom_image, target_custom_image_shape,
+                                                                data_from_configured_generator, neural_network_model)
+
+        image_to_plot, title_image, image_predictions = data_to_plot_tuple
+
+        mpyplot.figure(figsize=(8, 6))
+        mpyplot.subplot(1, 1, 1)
+        self.preprocessConlusions.plotPredictedImage(image_to_plot, title_image)
+        mpyplot.subplot(1, 1, 1)
+        self.preprocessConlusions.plotPredictedValues(image_to_plot, title_image, image_predictions)
+        mpyplot.show()
