@@ -31,9 +31,10 @@ class ModelConfiguration:
     Methods
     ----------
     compileModel(model: object) -> None
-        :param model:
+        The following function can be used to compile a hierarchical neural network model in order to
+        start the learning process.
     createHistoryAndRunModel(model: object) -> object
-
+        The following method is used to start the learning process.
     """
 
     # Class Object Attributes - Define default values
