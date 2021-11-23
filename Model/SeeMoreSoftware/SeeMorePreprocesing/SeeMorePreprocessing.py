@@ -187,7 +187,7 @@ class SeeMorePreprocessingSoftware:
             validationDirectory = os.path.join(mainDirectory, "Validation")
             # map(give_me_function - action, give_me_parameters - data), returns a map object
             # doesn't modify the data parameter - immutable data
-            any(map(self.createNewFolder, [path_to_folder, trainingDirectory, validationDirectory]))
+            any(map(self.createNewFolder, [mainDirectory, trainingDirectory, validationDirectory]))
             return trainingDirectory, validationDirectory  # tuple -> ()
         except OSError:
             DisplayErrorNotification("Process of creating folders for learning, "
