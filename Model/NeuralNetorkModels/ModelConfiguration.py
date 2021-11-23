@@ -49,8 +49,8 @@ class ModelConfiguration:
 
     # Using Class Object Attributes define for what type of problems the ModelConfiguration is valid to implement
     if recognizeWingComponents or recognizeAircraftPoundings:
-        def __init__(self, optimizer: object or str, lossFunction: object or str, history_name: str,
-                     trainingGenerator: object, epochsNumber: int, validationGenerator: object, **kwargs):
+        def __init__(self, optimizer: object or str, lossFunction: object or str, trainingGenerator: object,
+                     epochsNumber: int, validationGenerator: object, **kwargs):
             """
             The following constructor enables to initialize the crucial parameters needed during compiling
             the neural network model.
@@ -68,7 +68,6 @@ class ModelConfiguration:
             self.optimizer = optimizer  # self refers to the particular object
             self.lossFunction = lossFunction
 
-            self.history_name = history_name
             ModelConfiguration.all_history_names.append(self.history_name)
 
             self.trainingGenerator = trainingGenerator
@@ -127,17 +126,15 @@ class ModelConfiguration:
         """
 
         if self.callback:
-            self.history_name = model.fit(
+            return model.fit(
                 self.trainingGenerator,
                 epochs=self.epochsNumber,
                 validation_data=self.validationGenerator,
                 callbacks=self.callback
             )
-            return self.history_name
         else:
-            self.history_name = model.fit(
+            return model.fit(
                 self.trainingGenerator,
                 epochs=self.epochsNumber,
                 validation_data=self.validationGenerator,
             )
-            return self.history_name
