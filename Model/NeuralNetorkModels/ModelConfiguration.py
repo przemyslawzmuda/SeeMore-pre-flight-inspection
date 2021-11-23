@@ -94,7 +94,7 @@ class ModelConfiguration:
         """
 
         model.compile(
-            optimizer=self.optimizer,
+            optimizer=self.optimizer(),
             loss=self.lossFunction,
             metrics=["accuracy"]
         )
