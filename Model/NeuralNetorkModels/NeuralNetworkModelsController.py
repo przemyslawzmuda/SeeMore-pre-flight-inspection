@@ -5,9 +5,11 @@ from IO.IOTkinter.DataInputWithTkinter.ChoosePath import InputDirectoryPathWithT
 from tensorflow.keras.activations import relu, softmax
 from tensorflow.keras.optimizers import Adam
 from ModelConfiguration import ModelConfiguration
+from Model.SeeMoreSoftware.DrawConlusionsFromDeepLearning.DrawConclusions import DrawConclusionsController
 
 
 class ConfigureAndRunLearningProcess:
+    drawConclusions = DrawConclusionsController()
 
     # Configure a generator for the training data set - get an ImageDataGenerator object
     training_data_augmentation = BasicZoomGenerator(1./255, [0.1, 0.3]).create_zoom_generator()
@@ -32,8 +34,11 @@ class ConfigureAndRunLearningProcess:
 
     # Compile the neural network model
     model_configuration_object = ModelConfiguration(
-        Adam, "categorical_crossentropy", "testing_history", training_data_generator, 3, validation_data_generator)
+        Adam, "categorical_crossentropy", training_data_generator, 3, validation_data_generator)
     model_configuration_object.compileModel(artificial_neural_network_model)
 
     # Fit the neural network model subsequently start the learning process
-    model_configuration_object.createHistoryAndRunModel(artificial_neural_network_model)
+    history_test = model_configuration_object.createHistoryAndRunModel(artificial_neural_network_model)
+
+    # Plot the accuracy and the cost function for training history learning as well as validation history learning
+    drawConclusions.plotLossAccuracyGraph(history_test)

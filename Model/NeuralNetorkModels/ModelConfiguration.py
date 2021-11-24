@@ -67,9 +67,6 @@ class ModelConfiguration:
             # Attributes (dynamic data):
             self.optimizer = optimizer  # self refers to the particular object
             self.lossFunction = lossFunction
-
-            ModelConfiguration.all_history_names.append(self.history_name)
-
             self.trainingGenerator = trainingGenerator
             self.epochsNumber = epochsNumber
             self.validationGenerator = validationGenerator
