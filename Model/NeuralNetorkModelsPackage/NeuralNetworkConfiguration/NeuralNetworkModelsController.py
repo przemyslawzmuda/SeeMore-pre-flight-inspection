@@ -1,8 +1,7 @@
-from TestModel import TestModel
+from Model.NeuralNetorkModelsPackage.NeuralNetworkModels.TestModel import TestModel
 from Model.Generator.BasicDataGenerator import BasicZoomGenerator
 from Model.Generator.FeedGenerator import FeedDataGenerator
 from IO.IOTkinter.DataInputWithTkinter.ChoosePath import InputDirectoryPathWithTkinter
-from IO.IOTkinter.DataOutputWithTkinter.DisplayNotifications import DisplayErrorNotification
 from tensorflow.keras.activations import relu, softmax
 from tensorflow.keras.optimizers import Adam
 from ModelConfiguration import ModelConfiguration
