@@ -45,5 +45,5 @@ process to solve any multi-classification problem.
 The following project is my own idea in order to
 test the application of the artificial intelligence 
 methods in the aviation industry. Moreover, the application
-my self-taught learning process of the Python language
+introduces my self-taught learning process of the Python language
 programming.
