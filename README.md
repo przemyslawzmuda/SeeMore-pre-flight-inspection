@@ -12,15 +12,17 @@ pounding of the AT3-R100 aircraft.
 The following application presents the source code 
 according to my Engineering Thesis, which is my last 
 examination on the Aviation Engineering curriculum. 
-The software is all-purposed. Moreover, it can be used 
+The software is all-purpose tool. Moreover, it can be used 
 to recognize and classify any kind of multiclass 
-items. The project has been created for almost six
-months.
+classification task.
 ## Technologies
 The project has been created with the following 
 technologies:
 * Python: 3.9;
-* TensorFlow: 2.6.0.
+* TensorFlow: 2.6.0;
+* Matplotlib: 3.4.3
+* Tkinter: 8.6;
+* PIL: 8.4.0
 ## Functionality
 The following processes can be performed:
 * Unzip and clean the files.
