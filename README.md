@@ -20,15 +20,15 @@ The project has been created with the following
 technologies:
 * Python: 3.9;
 * TensorFlow: 2.6.0;
-* Matplotlib: 3.4.3
+* Matplotlib: 3.4.3;
 * Tkinter: 8.6;
-* PIL: 8.4.0
+* PIL: 8.4.0.
 ## Functionality
 The following processes can be performed:
 * Unzip and clean the files.
 * Perform cleaning process of the data images 
 (convert all images into the JPEG extension).
-* Create subdirectories fot the training and
+* Create subdirectories for the training and
 validation data sets (the size of the training data
 set can be set manually).
 * Configure the generator in order to conduct
