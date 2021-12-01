@@ -39,8 +39,6 @@ class ConfigureAndRunLearningProcess:
         # Use the tuple() constructor to make a tuple
         return tuple((training_data_augmentation, validation_data_augmentation))
 
-
-
     def createDataBatchesForLearning(self, path_to_training_data, training_data_augmentation, path_to_validation_data,
                                      validation_data_augmentation) -> tuple:
         # Load a training data in from directories into the training generator, turning it into the batches
@@ -54,10 +52,7 @@ class ConfigureAndRunLearningProcess:
         # Use a tuple constructor to make a tuple
         return tuple((training_data_generator, validation_data_generator))
 
-
-
     def compileAndFitNeuralNetworkModel(self, training_data_generator, validation_data_generator) -> object:
-
         # Return a hierarchical structure of the neural network
         artificial_neural_network_model = TestModel(relu, 3, softmax).pfi_model_0()
 
@@ -71,10 +66,7 @@ class ConfigureAndRunLearningProcess:
 
         return history_test
 
-
     def plotAccuracyAndLossValues(self, history_test):
 
         # Plot the accuracy and the cost function for training history learning as well as validation history learning
         self.drawConclusions.plotLossAccuracyGraph(history_test)
-
-

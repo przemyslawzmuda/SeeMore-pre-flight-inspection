@@ -1,4 +1,5 @@
 from NeuralNetworkModelsController import ConfigureAndRunLearningProcess
+from IO.IOTkinter.DataOutputWithTkinter.DisplayNotifications import ShowInformationToUser
 
 
 class LetTheLearnBegin:
@@ -31,3 +32,4 @@ class LetTheLearnBegin:
 
     # Plot the accuracy and the cost function for the training history learning as well as validation history learning
     starter.plotAccuracyAndLossValues(history_learning)
+    ShowInformationToUser("The training process has been completed. Thank You.").runNotification()
