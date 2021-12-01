@@ -14,22 +14,24 @@ class LetTheLearnBegin:
         5. Plot in the figure the accuracy and the cost function after the completed learning process.
     """
 
-    starter = ConfigureAndRunLearningProcess()
+    @staticmethod
+    def starter():
+        starter = ConfigureAndRunLearningProcess()
 
-    # Read directories contains training and validation items
-    path_to_training_data, path_to_validation_data = starter.readDirectoriesForLearning()
+        # Read directories contains training and validation items
+        path_to_training_data, path_to_validation_data = starter.readDirectoriesForLearning()
 
-    # Configure a generator for the training and validation data set - get an ImageDataGenerator object
-    training_generator_augmentation, validation_generator_augmentation = starter.configureDataAugmentations()
+        # Configure a generator for the training and validation data set - get an ImageDataGenerator object
+        training_generator_augmentation, validation_generator_augmentation = starter.configureDataAugmentations()
 
-    # Load a training and validation data in from directories into the training generator, turning it into the batches
-    training_data_generator, validation_data_generator = starter.createDataBatchesForLearning(
-        path_to_training_data, training_generator_augmentation, path_to_validation_data,
-        validation_generator_augmentation)
+        # Load a training and validation data in from directories into the training generator, turning it into the batches
+        training_data_generator, validation_data_generator = starter.createDataBatchesForLearning(
+            path_to_training_data, training_generator_augmentation, path_to_validation_data,
+            validation_generator_augmentation)
 
-    # Fit the neural network model subsequently start the learning process
-    history_learning = starter.compileAndFitNeuralNetworkModel(training_data_generator, validation_data_generator)
+        # Fit the neural network model subsequently start the learning process
+        history_learning = starter.compileAndFitNeuralNetworkModel(training_data_generator, validation_data_generator)
 
-    # Plot the accuracy and the cost function for the training history learning as well as validation history learning
-    starter.plotAccuracyAndLossValues(history_learning)
-    ShowInformationToUser("The training process has been completed. Thank You.").runNotification()
+        # Plot the accuracy and the cost function for the training history learning as well as validation history learning
+        starter.plotAccuracyAndLossValues(history_learning)
+        ShowInformationToUser("The training process has been completed. Thank You.").runNotification()
