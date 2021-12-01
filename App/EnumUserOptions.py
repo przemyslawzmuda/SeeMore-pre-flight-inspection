@@ -23,6 +23,7 @@ class UserChoiceOptions(Enum):
     OPEN_ZIP_DATA = (1, "Unzip the zip file.")
     CLEAN_DATA_SETS = (2, "Start cleaning process of the data images.")
     CREATE_DATA_SETS_FOR_NEURAL_NETWORK = (3, "Create subdirectories for training and validation data sets.")
+    START_LEARNING = (4, "Start deep learning process.")
 
     '''
     @unique decorator searches an enumeration's __members__ gathering any aliases it finds. If any are found

@@ -1,4 +1,4 @@
-from NeuralNetworkModelsController import ConfigureAndRunLearningProcess
+from Model.NeuralNetorkModelsPackage.NeuralNetworkConfiguration.NeuralNetworkModelsController import ConfigureAndRunLearningProcess
 from IO.IOTkinter.DataOutputWithTkinter.DisplayNotifications import ShowInformationToUser
 
 

@@ -7,6 +7,7 @@ from IO.IOTkinter.DataOutputWithTkinter.DisplayNotifications import DisplayError
 from Exception.InputIntMismatchException import InputIntMismatchException
 from Model.SeeMoreSoftware.SeeMorePreprocesing import SeeMorePreprocessingController
 from Model.SeeMoreSoftware.SeeMorePreprocesing.SeeMorePreprocessing import SeeMorePreprocessingSoftware
+from Model.NeuralNetorkModelsPackage.NeuralNetworkConfiguration.LearningStarter import LetTheLearnBegin
 
 
 class AppController:
@@ -41,7 +42,8 @@ class AppController:
             0: self.closeApp,
             1: SeeMorePreprocessingSoftware.extractZipFile,
             2: self.preprocessData.cleanImagesDataSet,
-            3: self.preprocessData.createTrainingValidationDataSets
+            3: self.preprocessData.createTrainingValidationDataSets,
+            4: LetTheLearnBegin.starter
         }
         dictionaryOptions[option]()
 
