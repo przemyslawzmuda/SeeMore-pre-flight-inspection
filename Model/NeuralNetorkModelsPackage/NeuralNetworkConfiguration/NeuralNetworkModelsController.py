@@ -6,6 +6,7 @@ from tensorflow.keras.activations import relu, softmax
 from tensorflow.keras.optimizers import Adam
 from Model.NeuralNetorkModelsPackage.NeuralNetworkConfiguration.ModelConfiguration import ModelConfiguration
 from Model.SeeMoreSoftware.DrawConlusionsFromDeepLearning.DrawConclusions import DrawConclusionsController
+from Model.Callbacks.LogsDictCallback import DisplayLogs
 
 
 class ConfigureAndRunLearningProcess:
@@ -58,7 +59,7 @@ class ConfigureAndRunLearningProcess:
 
         # Compile the neural network model
         model_configuration_object = ModelConfiguration(
-            Adam, "categorical_crossentropy", training_data_generator, 3, validation_data_generator)
+            Adam, "categorical_crossentropy", training_data_generator, 3, validation_data_generator, ownCallback=DisplayLogs())
         model_configuration_object.compileModel(artificial_neural_network_model)
 
         # Fit the neural network model subsequently start the learning process
