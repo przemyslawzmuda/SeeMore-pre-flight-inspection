@@ -127,7 +127,7 @@ class ModelConfiguration:
                 self.trainingGenerator,
                 epochs=self.epochsNumber,
                 validation_data=self.validationGenerator,
-                callbacks=self.callback
+                callbacks=[self.callback]
             )
         else:
             return model.fit(
