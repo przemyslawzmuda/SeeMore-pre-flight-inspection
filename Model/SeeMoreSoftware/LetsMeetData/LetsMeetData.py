@@ -1,5 +1,6 @@
 import os
 import random
+from collections import KeysView
 import numpy
 from PIL import Image
 import matplotlib.pyplot as mpyplot
@@ -27,27 +28,31 @@ class LetsMeetData:
 
         :param root_path:
         """
-        number_files = 0
-        for directoryPath, subDirNames, fileNames in os.walk(root_path, topdown=True):
-            if len(subDirNames) == 1 and len(fileNames) == 1:
-                # os.walk yields a 3-tuple: (dirpath, dirnames, filenames)
-                print(f"There is {len(subDirNames)} sub-directory and {len(fileNames)} file in {directoryPath}.")
-            elif len(subDirNames) == 0 and len(fileNames) == 0:
-                print(f"There is no sub-directories and there is not any file in {directoryPath}.")
-            elif len(subDirNames) > 1 and len(fileNames) == 1:
-                print(f"There are {len(subDirNames)} sub-directories and {len(fileNames)} file in {directoryPath}.")
-            elif len(subDirNames) == 1 and len(fileNames) > 1:
-                print(f"There is {len(subDirNames)} sub-directory and {len(fileNames)} files in {directoryPath}.")
-            else:
-                print(f"There are {len(subDirNames)} sub-directories and {len(fileNames)} files in {directoryPath}.")
-            number_files += len(fileNames)
 
-        if number_files == 0:
+        absolute_number_files = 0
+        for directoryPath, subDirNames, fileNames in os.walk(root_path, topdown=True):
+            number_sub_directories = len(subDirNames)
+            number_files = len(fileNames)
+            if number_sub_directories == 1 and number_files == 1:
+                # os.walk yields a 3-tuple: (dirpath, dirnames, filenames)
+                print(f"There is {number_sub_directories} sub-directory and {number_files} file in {directoryPath}.")
+            elif number_sub_directories == 0 and number_files == 0:
+                print(f"There is no sub-directories and there is not any file in {directoryPath}.")
+            elif number_sub_directories > 1 and number_files == 1:
+                print(f"There are {number_sub_directories} sub-directories and {number_files} file in {directoryPath}.")
+            elif number_sub_directories == 1 and number_files > 1:
+                print(f"There is {number_sub_directories} sub-directory and {number_files} files in {directoryPath}.")
+            else:
+                print(
+                    f"There are {number_sub_directories} sub-directories and {number_files} files in {directoryPath}.")
+            absolute_number_files += number_files
+
+        if absolute_number_files == 0:
             print(f"To sum up, there is not any file in {root_path}.")
-        elif number_files == 1:
+        elif absolute_number_files == 1:
             print(f"To sum up, there is 1 file in {root_path}.")
         else:
-            print(f"To sum up, there are {number_files} files in {root_path}.")
+            print(f"To sum up, there are {absolute_number_files} files in {root_path}.")
 
     @staticmethod
     def create_dictionary_paths_and_files(root_path: str) -> dict:
@@ -61,6 +66,7 @@ class LetsMeetData:
 
         :return: dataDictionary: {absolute_path_to_folder (String): images_names (List)}
         """
+
         dataDictionary = {}
         for directoryPath, subDirNames, fileNames in os.walk(root_path, topdown=True):
             # os.walk yields a 3-tuple: (dirpath, dirnames, filenames)
@@ -71,19 +77,33 @@ class LetsMeetData:
         return dataDictionary
 
     @staticmethod
-    def getDirectoriesPathInDataSet(root_path):
-        dataSetDictionary = LetsMeetData.createDictionaryPathsAndFiles(root_path)
+    def get_directories_paths_from_data_set(root_path: str) -> KeysView:
+        """
+        The following function is used to return the dict_keys object that contains all keys from the dictionary.
+        According to the LetsMeetData.create_dictionary_paths_and_files(root_path) static method,
+        the keys are the absolute paths into the subdirectories that contains images.
+
+        :param root_path: Absolute path into the directory.
+
+        :return: <class 'dict_keys'>.
+        """
+
+        dataSetDictionary = LetsMeetData.create_dictionary_paths_and_files(root_path)
         return dataSetDictionary.keys()
 
     @staticmethod
-    def returnRandomImageFromDirectory(root_path):
+    def return_random_image_from_directory(root_path: str) -> str:
         """
-        :param root_path:
-        :return: outrightPathToRandomImage
-        The following function returns a path to the random image from the root_path directory.
+        The following function can be used to return a random absolute path into the image located inside
+        the root_path.
+
+        :param root_path: Absolute String path into the directory.
+
+        :return: outrightPathToRandomImage: <class 'str'>.
         """
+        
         # Get a dictionary {'path': [img1, img2, ..., img_n]}
-        imagesDictionary = LetsMeetData.createDictionaryPathsAndFiles(root_path)
+        imagesDictionary = LetsMeetData.create_dictionary_paths_and_files(root_path)
         # Get items from imagesDictionary as dict_items: dict_items( [ (path1, [images]) ] )
         imagesDictionaryItems = imagesDictionary.items()  # dict_items() object
         # Convert the following dict_items() object into a List data type: [ (path1, [images1], ... ]
