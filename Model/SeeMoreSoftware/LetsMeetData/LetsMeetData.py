@@ -7,30 +7,59 @@ import matplotlib.image as mimage
 
 
 class LetsMeetData:
-    @staticmethod
-    def walkThroughData(root_path):
-        """
-        :param root_path:
-        The function walkThroughData() walks through the main directory called as a parameter root_path,
-        in order to read subdirectories as well as files placed in the root_path. Informations according to
-        the root_path will be displayed.
-        """
-        filesNumber = 0
-        for directoryPath, subDirNames, fileNames in os.walk(root_path, topdown=True):
-            # os.walk yields a 3-tuple: (dirpath, dirnames, filenames)
-            print(f"There are {len(subDirNames)} sub-directories and {len(fileNames)} files in {directoryPath}.")
-            filesNumber += len(fileNames)
-        print(f"There are {filesNumber} files in {root_path}.")
+    """
+    The following class is used to meet new data. Method are capable to make a research what king of data have
+    been uploaded.
+
+    Methods
+    ----------
+    walk_through_data(root_path: str)
+        The following function can be used to print number of the files in each subdirectories.
+    create_dictionary_paths_and_files(root_path: str) -> dict:
+    """
 
     @staticmethod
-    def createDictionaryPathsAndFiles(root_path):
+    def walk_through_data(root_path: str):
         """
+        The following function walks through the main directory called as a parameter root_path,
+        in order to read subdirectories as well as files placed in the root_path. Information according to
+        the root_path will be displayed.
+
         :param root_path:
-        :return: dataDictionary - {path_to_folder (String): images_names (List)}
+        """
+        number_files = 0
+        for directoryPath, subDirNames, fileNames in os.walk(root_path, topdown=True):
+            if len(subDirNames) == 1 and len(fileNames) == 1:
+                # os.walk yields a 3-tuple: (dirpath, dirnames, filenames)
+                print(f"There is {len(subDirNames)} sub-directory and {len(fileNames)} file in {directoryPath}.")
+            elif len(subDirNames) == 0 and len(fileNames) == 0:
+                print(f"There is no sub-directories and there is not any file in {directoryPath}.")
+            elif len(subDirNames) > 1 and len(fileNames) == 1:
+                print(f"There are {len(subDirNames)} sub-directories and {len(fileNames)} file in {directoryPath}.")
+            elif len(subDirNames) == 1 and len(fileNames) > 1:
+                print(f"There is {len(subDirNames)} sub-directory and {len(fileNames)} files in {directoryPath}.")
+            else:
+                print(f"There are {len(subDirNames)} sub-directories and {len(fileNames)} files in {directoryPath}.")
+            number_files += len(fileNames)
+
+        if number_files == 0:
+            print(f"To sum up, there is not any file in {root_path}.")
+        elif number_files == 1:
+            print(f"To sum up, there is 1 file in {root_path}.")
+        else:
+            print(f"To sum up, there are {number_files} files in {root_path}.")
+
+    @staticmethod
+    def create_dictionary_paths_and_files(root_path: str) -> dict:
+        """
         The following function takes as in input the data type String (root_path), walks through that main directory
-        and returns a dictionary data type called 'dataDictionary'. The keys are path to the subdirectories located
-        in the root_path as well as this the values are list data type contains names of the images located
+        and returns a dictionary data type called 'dataDictionary'. The keys are paths to the subdirectories located
+        in the root_path as well as this the values are list of data type that contains names of the images located
         inside the subdirectories.
+
+        :param root_path: String data type. Absolute path into the main folder.
+
+        :return: dataDictionary: {absolute_path_to_folder (String): images_names (List)}
         """
         dataDictionary = {}
         for directoryPath, subDirNames, fileNames in os.walk(root_path, topdown=True):
