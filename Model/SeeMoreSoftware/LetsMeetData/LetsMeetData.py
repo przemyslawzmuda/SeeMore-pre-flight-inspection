@@ -1,8 +1,10 @@
 import os
 import random
 from PIL import Image
-from numpy import ndarray
 from collections import KeysView
+
+from numpy import ndarray
+
 import matplotlib.image as mimage
 import matplotlib.pyplot as mpyplot
 
@@ -166,7 +168,7 @@ class LetsMeetData:
 
         :return: None.
         """
-        
+
         mpyplot.imshow(mimage.imread(path_to_image))  # pass a tensor image in the matrix as an argument
         mpyplot.title(os.path.basename(path_to_image))
         mpyplot.axis(False)
