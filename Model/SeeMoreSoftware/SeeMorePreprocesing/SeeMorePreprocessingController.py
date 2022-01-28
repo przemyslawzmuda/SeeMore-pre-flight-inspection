@@ -1,7 +1,7 @@
 import os
 import time
 import random
-from IO.IOTerminal.DataInputWithTerminal.DataInput import InputInt
+
 from IO.IOTkinter.DataInputWithTkinter.ChoosePath import InputDirectoryPathWithTkinter
 from Model.SeeMoreSoftware.LetsMeetData import LetsMeetData
 from Exception.InputIntMismatchException import InputIntMismatchException
@@ -18,7 +18,7 @@ class PreprocessingController:
     def __init__(self):
         self.preprocessSoftware = SeeMorePreprocessingSoftware()
 
-    def cleanImagesDataSet(self):
+    def clean_images_data_set(self):
         """
         The following function makes a process of cleaning a data set. It can works with one folder also with
         the main folder which contains subdirectories.
@@ -28,11 +28,11 @@ class PreprocessingController:
                                                          " start a cleaning process.").runNotification()
 
         # dataSetDictionary = { 'path1':[images1, ...], 'path2':[images2, ...], ... }
-        dataSetDictionary = LetsMeetData.createDictionaryPathsAndFiles(path_to_data_set)
+        dataSetDictionary = LetsMeetData.LetsMeetData.create_dictionary_paths_and_files(path_to_data_set)
 
         for keyPath, valueImagesNamesList in dataSetDictionary.items():
             # items() returns a list containing a tuple for each key-value pair
-            self.preprocessSoftware.cleanImagesFolder(keyPath, valueImagesNamesList)
+            self.preprocessSoftware.clean_images_folder(keyPath, valueImagesNamesList)
 
     def createTrainingValidationDataSets(self):
         """
@@ -64,17 +64,17 @@ class PreprocessingController:
         trainingDataSize /= 100
 
         # Create the Training and Validation folders
-        trainingDirectory, validationDirectory = self.preprocessSoftware.createFoldersForGenerators(approach_path)
+        trainingDirectory, validationDirectory = self.preprocessSoftware.create_folders_for_generators(approach_path)
 
         # Get a data dictionary: { 'path1':[images1, ...], 'path2':[images2, ...], ... }
-        dataImagesDictionary = LetsMeetData.createDictionaryPathsAndFiles(departue_path)
+        dataImagesDictionary = LetsMeetData.LetsMeetData.create_dictionary_paths_and_files(departue_path)
 
         for keyPath, valueImagesList in dataImagesDictionary.items():
             sub_folder = os.path.basename(keyPath)
             sub_folder_path_training = os.path.join(trainingDirectory, sub_folder)
             sub_folder_path_validation = os.path.join(validationDirectory, sub_folder)
-            self.preprocessSoftware.createNewFolder(sub_folder_path_training)
-            self.preprocessSoftware.createNewFolder(sub_folder_path_validation)
+            self.preprocessSoftware.create_new_folder(sub_folder_path_training)
+            self.preprocessSoftware.create_new_folder(sub_folder_path_validation)
 
             '''
             Shuffle a valueImagesList, it doesn't return anything, only reorganize an existing list.
@@ -95,12 +95,12 @@ class PreprocessingController:
             for image in trainingImagesList:
                 departue_path_image = os.path.join(keyPath, image)
                 approach_path_image = os.path.join(sub_folder_path_training, image)
-                self.preprocessSoftware.copyFile(departue_path_image, approach_path_image)
+                self.preprocessSoftware.copy_file(departue_path_image, approach_path_image)
 
             for image in validationImagesList:
                 departue_path_image = os.path.join(keyPath, image)
                 approach_path_image = os.path.join(sub_folder_path_validation, image)
-                self.preprocessSoftware.copyFile(departue_path_image, approach_path_image)
+                self.preprocessSoftware.copy_file(departue_path_image, approach_path_image)
 
         time.sleep(2)
         ShowInformationToUser(

@@ -3,10 +3,13 @@ import time
 import shutil
 import pyheif
 import zipfile
+
 from PIL import Image
+
 from Exception.PathException import NoChosenFilePathException, NoChosenDirectoryPathException
 from IO.IOTkinter.DataInputWithTkinter.ChoosePath import InputFilePathWithTkinter, InputDirectoryPathWithTkinter
-from IO.IOTkinter.DataOutputWithTkinter.DisplayNotifications import ShowInformationToUser, DisplayErrorNotification, BreakWorkingLoopFunction
+from IO.IOTkinter.DataOutputWithTkinter.DisplayNotifications import ShowInformationToUser, DisplayErrorNotification, \
+    BreakWorkingLoopFunction
 
 
 class SeeMorePreprocessingSoftware:
@@ -16,7 +19,13 @@ class SeeMorePreprocessingSoftware:
     """
 
     @staticmethod
-    def cleanAndExtractZipData(path_to_file: str, output_path: str):
+    def clean_and_extract_zip_data(path_to_file: str, output_path: str):
+        """
+        Open a ZIP file, where file can be a path to a file (a string), a file-like object or a path-like object.
+        As well as this create and saved the new zip file without hidden files crated by MAC OS system.
+        :param path_to_file: can be a string, a file-like object or a path-like object.
+        :param output_path: path where the zip file should be saved.
+        """
         default_zip_file = zipfile.ZipFile(path_to_file, mode='r')
         without_rubbish_zip_file = zipfile.ZipFile(
             os.path.join(output_path, 'cleaned-' + os.path.basename(path_to_file)), mode='w')
@@ -39,7 +48,7 @@ class SeeMorePreprocessingSoftware:
             "The process of unzipping of the file has been completed successfully.").runNotification()
 
     @staticmethod
-    def extractZipFile():
+    def extract_zip_file():
         """
         The following function makes a copy of a given zip file and creates at output_path a zip file
         without '__MACOSX' file as well as extract the cleaned zip file at output_path.
@@ -58,7 +67,7 @@ class SeeMorePreprocessingSoftware:
                 DisplayErrorNotification(error_message).runNotification()
 
             try:
-                SeeMorePreprocessingSoftware.cleanAndExtractZipData(path_to_file, output_path)
+                SeeMorePreprocessingSoftware.clean_and_extract_zip_data(path_to_file, output_path)
             except IsADirectoryError as err:
                 DisplayErrorNotification(err).runNotification()
             except AttributeError as err:
@@ -72,13 +81,13 @@ class SeeMorePreprocessingSoftware:
                 if answer:
                     break
 
-    def removeFile(self, directory_to_file: str):
+    def remove_file(self, directory_to_file: str):
         try:
             os.remove(directory_to_file)
         except FileNotFoundError:
             DisplayErrorNotification("File not exists.").runNotification()
 
-    def getDirectoryAndFileName(self, directory_to_file: str) -> tuple:
+    def get_directory_and_file_name(self, directory_to_file: str) -> tuple:
         """
         An useful function to divide the directory to file into two parts.
         :param directory_to_file: Path to the data Set.
@@ -90,8 +99,8 @@ class SeeMorePreprocessingSoftware:
         dataTuple = (directory_to_folder, file_name)
         return dataTuple
 
-    def convertHeifImageToJpeg(self, directory_to_heif_image: str):
-        directory, heif_image_name = self.getDirectoryAndFileName(directory_to_heif_image)
+    def convert_heif_image_to_jpeg(self, directory_to_heif_image: str):
+        directory, heif_image_name = self.get_directory_and_file_name(directory_to_heif_image)
         name, end = heif_image_name.split(".")
         heif_file = pyheif.read(directory_to_heif_image)  # heif_file is a HeifFile object, read an encoded HEIF image
         # convert a HeifFile object to a Pillow Image object
@@ -99,10 +108,10 @@ class SeeMorePreprocessingSoftware:
                                                             heif_file.mode, heif_file.stride)
         # convert a Pillow object to a JPEG extension image
         heif_file_decoded_to_Pillow_image.save(os.path.join(directory, (name + ".jpg")), "JPEG")
-        self.removeFile(directory_to_heif_image)  # remove unnecessary heif image
+        self.remove_file(directory_to_heif_image)  # remove unnecessary heif image
 
-    def convertPngImageToJpeg(self, directory_to_png_image: str):
-        directory, png_image_name = self.getDirectoryAndFileName(directory_to_png_image)
+    def convert_png_image_to_jpeg(self, directory_to_png_image: str):
+        directory, png_image_name = self.get_directory_and_file_name(directory_to_png_image)
         (name, end) = os.path.splitext(png_image_name)
         try:
             with Image.open(directory_to_png_image) as image:
@@ -110,9 +119,9 @@ class SeeMorePreprocessingSoftware:
                 rgb_image.save(os.path.join(directory, (name+".jpg")))
         except (FileNotFoundError, ValueError, OSError) as err:
             DisplayErrorNotification(f"Unable to convert an image to JPEG extension. - {err}").runNotification()
-        self.removeFile(directory_to_png_image)
+        self.remove_file(directory_to_png_image)
 
-    def cleanImagesFolder(self, directory_to_folder: str, imagesNamesList: list):
+    def clean_images_folder(self, directory_to_folder: str, imagesNamesList: list):
         """
         If the format of the image is different than JPEG extension, the image is converted to that format.
         The JPEG extension is recommended for colourful images by the TensorFlow documentation.
@@ -129,17 +138,17 @@ class SeeMorePreprocessingSoftware:
         for image in imagesNamesList:
             directory_to_file = os.path.join(directory_to_folder, image)
             if "HEIC" in image or "heic" in image:
-                self.convertHeifImageToJpeg(directory_to_file)
+                self.convert_heif_image_to_jpeg(directory_to_file)
                 heic_number += 1
             elif image == ".DS_Store":
-                self.removeFile(directory_to_file)
+                self.remove_file(directory_to_file)
                 dsFile_number += 1
             else:
                 try:
                     with Image.open(directory_to_file) as img:
                         image_format = img.format
                         if image_format == "PNG":
-                            self.convertPngImageToJpeg(directory_to_file)
+                            self.convert_png_image_to_jpeg(directory_to_file)
                             png_number += 1
                         elif image_format == "JPEG":
                             jpg_number += 1
@@ -156,7 +165,7 @@ class SeeMorePreprocessingSoftware:
         print(f"Time of the image cleaning: {how_long} [HH:MM:SS].")
         print("----------------------------------------------------------------------------------")
 
-    def createNewFolder(self, path_to_folder: str):
+    def create_new_folder(self, path_to_folder: str):
         """
         The following function creates a new folder in the given path to folder as a parameter.
         :param path_to_folder: Path into the folder which will be created.
@@ -172,7 +181,7 @@ class SeeMorePreprocessingSoftware:
                 f"The following folder or directory has not been found. Unable to create "
                 f"the new folder.").runNotification()
 
-    def createFoldersForGenerators(self, path_to_folder: str) -> tuple:
+    def create_folders_for_generators(self, path_to_folder: str) -> tuple:
         """
         The following function will create the main folder and two sub-folders for training and validation data.
         The two sub-folders named 'Training' and 'Validation' will be defined in the main folder afterwards.
@@ -187,13 +196,13 @@ class SeeMorePreprocessingSoftware:
             validationDirectory = os.path.join(mainDirectory, "Validation")
             # map(give_me_function - action, give_me_parameters - data), returns a map object
             # doesn't modify the data parameter - immutable data
-            any(map(self.createNewFolder, [mainDirectory, trainingDirectory, validationDirectory]))
+            any(map(self.create_new_folder, [mainDirectory, trainingDirectory, validationDirectory]))
             return trainingDirectory, validationDirectory  # tuple -> ()
         except OSError:
             DisplayErrorNotification("Process of creating folders for learning, "
                                      "have not been completed.").runNotification()
 
-    def copyFile(self, file_source: str, file_destination: str):
+    def copy_file(self, file_source: str, file_destination: str):
         """
         The following function copies a file from file_source into the file_destination.
         :param file_source: entire path to the file
@@ -203,7 +212,7 @@ class SeeMorePreprocessingSoftware:
         try:
             assert isinstance(file_source, str), f"The following path: {file_source} should not be a number."
             assert isinstance(file_destination, str), f"The following path: {file_destination} should not be a number."
-            shutil.copyfile(file_source, file_destination)
+            shutil.copy_file(file_source, file_destination)
         except shutil.SameFileError:
             DisplayErrorNotification(
                 f"File source path: {file_source} and a path to place where the file "
