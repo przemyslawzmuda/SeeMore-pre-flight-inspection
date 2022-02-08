@@ -1,5 +1,6 @@
 import sys
 import time
+
 from IO.IOTerminal.DataInputWithTerminal.DataInput import InputInt
 from EnumUserOptions import UserChoiceOptions
 from Exception.OptionException import NoSuchOptionException
@@ -40,8 +41,8 @@ class AppController:
     def switchOptionInDictionaryPossibilities(self, option):
         dictionaryOptions = {
             0: self.closeApp,
-            1: SeeMorePreprocessingSoftware.extractZipFile,
-            2: self.preprocessData.cleanImagesDataSet,
+            1: SeeMorePreprocessingSoftware.extract_zip_file,
+            2: self.preprocessData.clean_images_data_set,
             3: self.preprocessData.createTrainingValidationDataSets,
             4: LetTheLearnBegin.starter
         }
