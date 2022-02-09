@@ -1,7 +1,8 @@
-from Model.NeuralNetorkModelsPackage.NeuralNetworkModels.PfiBaselineModel import BaselineModel
-from Model.NeuralNetorkModelsPackage.NeuralNetworkConfiguration.ModelConfiguration import ModelConfiguration
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPool2D, Flatten, Dense
+
+from Model.NeuralNetorkModelsPackage.NeuralNetworkModels.PfiBaselineModel import BaselineModel
+from Model.NeuralNetorkModelsPackage.NeuralNetworkConfiguration.ModelConfiguration import ModelConfiguration
 
 
 class PfiModel1(BaselineModel, ModelConfiguration):

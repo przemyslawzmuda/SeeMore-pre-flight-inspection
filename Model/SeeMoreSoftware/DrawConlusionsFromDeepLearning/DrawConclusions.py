@@ -1,4 +1,5 @@
 import matplotlib.pyplot as mpyplot
+
 from Model.SeeMoreSoftware.DrawConlusionsFromDeepLearning.DrawConclusionsStructure import ConclusionsStructure
 from IO.IOTkinter.DataInputWithTkinter.ChoosePath import InputFilePathWithTkinter
 from IO.IOTkinter.DataInputWithTkinter.DataInput import AskUserForIntegerNumber, AskUserForString
