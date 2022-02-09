@@ -7,15 +7,15 @@ from Model.NeuralNetorkModelsPackage.NeuralNetworkConfiguration.ModelConfigurati
 
 class PfiModel1(BaselineModel, ModelConfiguration):
     # Overrides Class Object Attributes
-    recognizeWingComponents = True
-    recognizeAircraftPoundings = True
+    recognize_wing_components = True
+    recognize_aircraft_poundings = True
 
     '''
     Pillar of OOP: INHERITANCE allows new objects to take on the properties of existing objects.
     Do INTROSPECTION using dir() method on the object.
     '''
 
-    if recognizeWingComponents or recognizeAircraftPoundings:
+    if recognize_wing_components or recognize_aircraft_poundings:
         def __init__(self, hidden_activation_function: object, output_activation_function: object, output_neurons: int,
                      conv_activation_function: object, number_filters: int, rows: int, columns: int, channels: int, **kwargs):
             """

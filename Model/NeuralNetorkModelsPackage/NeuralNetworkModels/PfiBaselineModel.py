@@ -9,9 +9,9 @@ class BaselineModel:
 
     Class Object Attributes
     -----------------------------
-    recognizeWingComponents : `bool`
+    recognize_wing_components : `bool`
         A boolean value of the variable in order to indicate the region of application of the class.
-    recognizeAircraftPoundings : `bool`
+    recognize_aircraft_poundings : `bool`
         A boolean value of the variable in order to indicate the region of application of the class.
 
     Dynamic Attributes
@@ -30,14 +30,14 @@ class BaselineModel:
     """
 
     # Class Object Attributes - actual attributes on that specific class, use anywhere in that class
-    recognizeWingComponents = True
-    recognizeAircraftPoundings = False
+    recognize_wing_components = True
+    recognize_aircraft_poundings = False
 
     '''
     Use OOP because the code is well organized, repeatable and memory efficient.
     '''
 
-    if recognizeWingComponents or recognizeAircraftPoundings:
+    if recognize_wing_components or recognize_aircraft_poundings:
         def __init__(self, hidden_activation_function: object, output_neurons: int, output_activation_function: object):
             """
             Instantiate the baseline model for a neural network.
