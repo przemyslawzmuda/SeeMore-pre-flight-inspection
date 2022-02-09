@@ -1,9 +1,10 @@
+from tensorflow.keras.activations import relu, softmax
+from tensorflow.keras.optimizers import Adam
+
 from Model.NeuralNetorkModelsPackage.NeuralNetworkModels.TestModel import TestModel
 from Model.Generator.BasicDataGenerator import BasicZoomGenerator
 from Model.Generator.FeedGenerator import FeedDataGenerator
 from IO.IOTkinter.DataInputWithTkinter.ChoosePath import InputDirectoryPathWithTkinter
-from tensorflow.keras.activations import relu, softmax
-from tensorflow.keras.optimizers import Adam
 from Model.NeuralNetorkModelsPackage.NeuralNetworkConfiguration.ModelConfiguration import ModelConfiguration
 from Model.SeeMoreSoftware.DrawConlusionsFromDeepLearning.DrawConclusions import DrawConclusionsController
 from Model.Callbacks.LogsDictCallback import DisplayLogs
