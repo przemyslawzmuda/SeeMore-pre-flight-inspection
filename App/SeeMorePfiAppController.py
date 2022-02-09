@@ -16,11 +16,11 @@ class AppController:
         self.preprocessData = SeeMorePreprocessingController.PreprocessingController()
 
     def mainAppController(self):
-        userChoice = None
-        while userChoice != UserChoiceOptions.EXIT.value:
+        user_choice = None
+        while user_choice != UserChoiceOptions.EXIT.value:
             self.displayOptionsToUser()
-            userChoice = self.getUserOption()
-            self.switchOptionInDictionaryPossibilities(userChoice)
+            user_choice = self.getUserOption()
+            self.switchOptionInDictionaryPossibilities(user_choice)
             print("\n")
 
     def displayOptionsToUser(self):
@@ -30,23 +30,23 @@ class AppController:
     def getUserOption(self):
         while True:
             try:
-                choiceNumber = InputInt("Choose available option: ").return_input_int()
-                choiceEnumOption = UserChoiceOptions.returnChoiceOptionFromValuesList(choiceNumber)
-                return choiceEnumOption
+                choice_number = InputInt("Choose available option: ").return_input_int()
+                choice_enum_option = UserChoiceOptions.returnChoiceOptionFromValuesList(choice_number)
+                return choice_enum_option
             except InputIntMismatchException as error_message:
                 DisplayErrorNotification(error_message).runNotification()
             except NoSuchOptionException as error_message:
                 DisplayErrorNotification(error_message).runNotification()
 
     def switchOptionInDictionaryPossibilities(self, option):
-        dictionaryOptions = {
+        dictionary_options = {
             0: self.closeApp,
             1: SeeMorePreprocessingSoftware.extract_zip_file,
             2: self.preprocessData.clean_images_data_set,
             3: self.preprocessData.createTrainingValidationDataSets,
             4: LetTheLearnBegin.starter
         }
-        dictionaryOptions[option]()
+        dictionary_options[option]()
 
     def closeApp(self):
         print("Thank You for working with us.")
