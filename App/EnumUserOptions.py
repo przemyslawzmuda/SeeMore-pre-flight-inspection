@@ -1,4 +1,5 @@
 from enum import Enum, unique
+
 from Exception.OptionException import NoSuchOptionException
 
 
@@ -31,11 +32,11 @@ class UserChoiceOptions(Enum):
     '''
 
     @staticmethod
-    def returnChoiceOptionFromValuesList(optionChoice):
+    def return_choice_option_from_values_list(option_choice):
         try:
-            choiceOptionsNumber = [option.value for option in UserChoiceOptions]
-            return choiceOptionsNumber[optionChoice]
+            choice_options_number = [option.value for option in UserChoiceOptions]
+            return choice_options_number[option_choice]
         except IndexError:
-            raise NoSuchOptionException(optionChoice, "No available option:")
+            raise NoSuchOptionException(option_choice, "No available option:")
         except TypeError as error_message:
             print(error_message)

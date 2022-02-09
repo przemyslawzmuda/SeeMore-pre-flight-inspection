@@ -5,10 +5,10 @@ from tensorflow.keras.layers import Flatten, Dense
 class TestModel:
 
     # Class Object Attributes - actual attributes on that specific class, use anywhere in that class
-    recognizeWingComponents = True
-    recognizeAircraftPoundings = False
+    recognize_wing_components = True
+    recognize_aircraft_poundings = False
 
-    if recognizeWingComponents or recognizeAircraftPoundings:
+    if recognize_wing_components or recognize_aircraft_poundings:
         def __init__(self, hidden_activation_function: object, output_neurons: int, output_activation_function: object):
             # Attributes (dynamic data) - specific to each class object
             self.hidden_activation_function = hidden_activation_function

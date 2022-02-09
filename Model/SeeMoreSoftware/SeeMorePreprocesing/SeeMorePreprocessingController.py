@@ -27,12 +27,12 @@ class PreprocessingController:
         path_to_data_set = InputDirectoryPathWithTkinter("Choose a file with data sets in order to"
                                                          " start a cleaning process.").runNotification()
 
-        # dataSetDictionary = { 'path1':[images1, ...], 'path2':[images2, ...], ... }
-        dataSetDictionary = LetsMeetData.LetsMeetData.create_dictionary_paths_and_files(path_to_data_set)
+        # data_set_dictionary = { 'path1':[images1, ...], 'path2':[images2, ...], ... }
+        data_set_dictionary = LetsMeetData.LetsMeetData.create_dictionary_paths_and_files(path_to_data_set)
 
-        for keyPath, valueImagesNamesList in dataSetDictionary.items():
+        for key_path, value_images_names_list in data_set_dictionary.items():
             # items() returns a list containing a tuple for each key-value pair
-            self.preprocessSoftware.clean_images_folder(keyPath, valueImagesNamesList)
+            self.preprocessSoftware.clean_images_folder(key_path, value_images_names_list)
 
     def createTrainingValidationDataSets(self):
         """
@@ -44,9 +44,9 @@ class PreprocessingController:
 
         while True:
             try:
-                trainingDataSize = AskUserForIntegerNumber("Enter the size of the training set in [%] "
+                training_data_size = AskUserForIntegerNumber("Enter the size of the training set in [%] "
                                                            "as an integer number").runNotification()
-                assert (trainingDataSize in range(1, 100)), "Give the size of a training data set in range " \
+                assert (training_data_size in range(1, 100)), "Give the size of a training data set in range " \
                                                             "from 1% to 99%. - A training set shouldn\'t " \
                                                             "contains 100% of the images."
                 break
@@ -60,19 +60,19 @@ class PreprocessingController:
         approach_path = InputDirectoryPathWithTkinter("Choose a directory where the Training and Validation "
                                                       "data sets will be created.").runNotification()
 
-        # Express the trainingDataSize as a percentage value
-        trainingDataSize /= 100
+        # Express the training_data_size as a percentage value
+        training_data_size /= 100
 
         # Create the Training and Validation folders
-        trainingDirectory, validationDirectory = self.preprocessSoftware.create_folders_for_generators(approach_path)
+        training_directory, validation_directory = self.preprocessSoftware.create_folders_for_generators(approach_path)
 
         # Get a data dictionary: { 'path1':[images1, ...], 'path2':[images2, ...], ... }
-        dataImagesDictionary = LetsMeetData.LetsMeetData.create_dictionary_paths_and_files(departue_path)
+        data_images_dictionary = LetsMeetData.LetsMeetData.create_dictionary_paths_and_files(departue_path)
 
-        for keyPath, valueImagesList in dataImagesDictionary.items():
-            sub_folder = os.path.basename(keyPath)
-            sub_folder_path_training = os.path.join(trainingDirectory, sub_folder)
-            sub_folder_path_validation = os.path.join(validationDirectory, sub_folder)
+        for key_path, valueImagesList in data_images_dictionary.items():
+            sub_folder = os.path.basename(key_path)
+            sub_folder_path_training = os.path.join(training_directory, sub_folder)
+            sub_folder_path_validation = os.path.join(validation_directory, sub_folder)
             self.preprocessSoftware.create_new_folder(sub_folder_path_training)
             self.preprocessSoftware.create_new_folder(sub_folder_path_validation)
 
@@ -84,21 +84,21 @@ class PreprocessingController:
             random.shuffle(valueImagesList)
 
             # Set the size of the training and validation data sets
-            trainingNumberImages = round(len(valueImagesList) * trainingDataSize)  # round float up into int number
-            # validationNumberImages = len(valueImagesList) - trainingNumberImages
+            training_number_images = round(len(valueImagesList) * training_data_size)  # round float up into int number
+            # validationNumberImages = len(valueImagesList) - training_number_images
 
             # Create images list for training and validation data sets
-            trainingImagesList = valueImagesList[:trainingNumberImages]  # [:x] - including the x-ith element
-            validationImagesList = valueImagesList[trainingNumberImages:]  # [x:] - not including the x-ith element
+            training_images_list = valueImagesList[:training_number_images]  # [:x] - including the x-ith element
+            validation_images_list = valueImagesList[training_number_images:]  # [x:] - not including the x-ith element
 
             # Copy files (imagesNames) into the training and validation folders
-            for image in trainingImagesList:
-                departue_path_image = os.path.join(keyPath, image)
+            for image in training_images_list:
+                departue_path_image = os.path.join(key_path, image)
                 approach_path_image = os.path.join(sub_folder_path_training, image)
                 self.preprocessSoftware.copy_file(departue_path_image, approach_path_image)
 
-            for image in validationImagesList:
-                departue_path_image = os.path.join(keyPath, image)
+            for image in validation_images_list:
+                departue_path_image = os.path.join(key_path, image)
                 approach_path_image = os.path.join(sub_folder_path_validation, image)
                 self.preprocessSoftware.copy_file(departue_path_image, approach_path_image)
 
@@ -108,7 +108,7 @@ class PreprocessingController:
             "been completed successfully.").runNotification()
         time.sleep(1)
         ShowInformationToUser(
-            f"There are {len(trainingImagesList)} images in the Training data set.").runNotification()
+            f"There are {len(training_images_list)} images in the Training data set.").runNotification()
         time.sleep(1)
         ShowInformationToUser(
-            f"There are {len(validationImagesList)} images in the Validation data set.").runNotification()
+            f"There are {len(validation_images_list)} images in the Validation data set.").runNotification()

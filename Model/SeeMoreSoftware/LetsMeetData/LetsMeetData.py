@@ -4,7 +4,6 @@ from PIL import Image
 from collections import KeysView
 
 from numpy import ndarray
-
 import matplotlib.image as mimage
 import matplotlib.pyplot as mpyplot
 
