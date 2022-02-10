@@ -31,7 +31,7 @@ class AppController:
         while True:
             try:
                 choice_number = InputInt("Choose available option: ").return_input_int()
-                choice_enum_option = UserChoiceOptions.returnChoiceOptionFromValuesList(choice_number)
+                choice_enum_option = UserChoiceOptions.return_choice_option_from_values_list(choice_number)
                 return choice_enum_option
             except InputIntMismatchException as error_message:
                 DisplayErrorNotification(error_message).runNotification()

@@ -5,8 +5,7 @@ from Exception.OptionException import NoSuchOptionException
 
 @unique
 class UserChoiceOptions(Enum):
-    """
-    The following enumeration class displays the optionals options for users that could be done by the application.
+    """The following enumeration class displays the optionals options for users that could be done by the application.
     """
 
     '''

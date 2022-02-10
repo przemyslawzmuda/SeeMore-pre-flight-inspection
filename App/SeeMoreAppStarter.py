@@ -10,4 +10,3 @@ class PfiAppStarter:
 
 if __name__ == "__main__":
     appStarter = PfiAppStarter()
-
