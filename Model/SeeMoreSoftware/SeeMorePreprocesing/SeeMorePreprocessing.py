@@ -1,9 +1,9 @@
 import os
 import time
 import shutil
-import pyheif
 import zipfile
 
+import pyheif
 from PIL import Image
 
 from Exception.PathException import NoChosenFilePathException, NoChosenDirectoryPathException
