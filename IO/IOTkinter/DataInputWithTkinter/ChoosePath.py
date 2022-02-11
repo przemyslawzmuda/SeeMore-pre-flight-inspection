@@ -1,6 +1,7 @@
 from tkinter import filedialog, messagebox
 
 from Exception.PathException import NoChosenFilePathException, NoChosenDirectoryPathException
+
 from IO.IOTkinter.ConfigureTkinterApplication import ConfigureTkinterNotification
 
 '''
@@ -17,7 +18,7 @@ class InputFilePathWithTkinter(ConfigureTkinterNotification, filedialog.FileDial
         """
         super().__init__(information_message)
 
-    def configureNotification(self):
+    def configure_notification(self):
         messagebox.showinfo("Information", self.message)
         file_path = filedialog.askopenfilename()
         if not file_path:
@@ -29,7 +30,7 @@ class InputDirectoryPathWithTkinter(ConfigureTkinterNotification):
     def __init__(self, information_message):
         super().__init__(information_message)
 
-    def configureNotification(self):
+    def configure_notification(self):
         messagebox.showinfo("Information", self.message)
         directory_path = filedialog.askdirectory()
         if directory_path == '':

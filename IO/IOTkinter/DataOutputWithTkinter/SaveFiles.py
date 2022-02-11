@@ -1,6 +1,7 @@
 import os
 
 from IO.IOTkinter.DataInputWithTkinter.ChoosePath import InputDirectoryPathWithTkinter
+
 from Model.SeeMoreSoftware.SeeMorePreprocesing.SeeMorePreprocessing import SeeMorePreprocessingSoftware
 
 
@@ -20,21 +21,20 @@ class SaveTensorFlowModel:
     See the Saving custom objects section below
     """
 
-    chooseDirectory = InputDirectoryPathWithTkinter("Choose a directory where the TensorFlow model "
-                                                    "will be saved.")
-    preprocessSoftware = SeeMorePreprocessingSoftware()
+    preprocess_software = SeeMorePreprocessingSoftware()
 
     def __init__(self, model_name):
         self.model_name = model_name
 
-    def saveModel(self):
+    def save_model(self):
         """
         The SavedModel format is another way to serialize models. Models saved in this format can be restored using
         tf.keras.models.load_model and are compatible with TensorFlow Serving.
         """
 
-        directory_path = self.chooseDirectory.return_directory_path()
-        path_to_save_model = os.path.join(directory_path, "Saved-TensorFlow-Models")
-        self.preprocessSoftware.createNewFolder(path_to_save_model)
+        chosen_directory = InputDirectoryPathWithTkinter("Choose a directory where the TensorFlow model "
+                                                         "will be saved.").run_notification()
+        path_to_save_model = os.path.join(chosen_directory, "Saved-TensorFlow-Models")
+        self.preprocess_software.create_new_folder(path_to_save_model)
         filePath = os.path.join(path_to_save_model, self.model_name)
         self.model_name.save(filePath)
