@@ -2,11 +2,11 @@ from SeeMorePfiAppController import AppController
 
 
 class PfiAppStarter:
-    app_name = "SeeMore v0.1"
+    APP_NAME = "SeeMore v0.1"
 
     def __init__(self):
-        AppController().mainAppController()
+        AppController().main_app_controller()
 
 
 if __name__ == "__main__":
-    appStarter = PfiAppStarter()
+    app_starter = PfiAppStarter()
