@@ -1,4 +1,4 @@
-from tensorflow.keras.callbacks import Callback
+from keras.callbacks import Callback
 
 
 class StopTrainingCallback(Callback):
